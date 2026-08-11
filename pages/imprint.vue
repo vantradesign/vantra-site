@@ -41,8 +41,9 @@ useSeoMeta({
         <section>
           <h2 class="caption">Licensing</h2>
           <p class="mt-4 measure text-ink-muted">
-            Each tool is licensed individually; the licence is stated on its page. Site copy and
-            imagery are © Vantra Design unless noted otherwise.
+            Each tool is licensed individually; the licence is stated on its page. The source code
+            of this site is MIT-licensed. Site copy and imagery are © Vantra Design unless noted
+            otherwise.
           </p>
         </section>
       </div>

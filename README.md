@@ -224,6 +224,13 @@ assumed. Target LCP < 2.5s, CLS < 0.1.
 
 ---
 
-## License
+## Licence
 
-Site code © Vantra Design. Each tool is licensed individually — see its page.
+Source code is MIT — see [`LICENSE`](./LICENSE). Editorial copy, imagery and the
+Vantra name are © 2026 Vantra Design, all rights reserved.
+
+Reusing the code to build your own site is the intended case. Republishing the
+writing or the imagery is not. [`NOTICE.md`](./NOTICE.md) states exactly which
+paths fall on which side, and lists the third-party font licences.
+
+Each Vantra product is licensed individually in its own repository.
