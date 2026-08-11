@@ -59,10 +59,11 @@ deliberate and should survive any redesign:
 - **It is wrapped in `@supports (animation-timeline: view())`.** Browsers without
   scroll-driven animations (Firefox, at the time of writing) render every word at
   full ink instead of leaving the paragraph permanently muted.
-- **The timeline is declared on the paragraph, not the words.** Each word
-  references the shared timeline via `animation-range`; if the words each owned a
-  `view()` timeline they would time against their own positions and the sweep
-  would collapse.
+- **The timeline is declared once on the whole block, not per paragraph or per
+  word.** `ManifestoBlock` puts `.highlight-scroll` on the wrapper around all
+  statements and passes each statement its word `offset` within the block, so the
+  sweep runs line after line through the block. A timeline per paragraph restarts
+  the sweep on every paragraph; a timeline per word collapses it entirely.
 
 Tuning lives in one declaration: `animation-range` start offset (16%), window
 width (12%), and total spread (44%).
