@@ -18,6 +18,13 @@
   --color-ink-faint: #626e70;
   --color-rule: color-mix(in oklab, #001619 12%, transparent);
 
+  /* Status pair, added for the /tools verdicts. Both are text-weight colours
+     drawn towards the existing palette rather than default UI green/red:
+     pass 7.4:1 on paper, fail 8.0:1, so both clear AA at caption size. Colour
+     is never the only signal — every badge also carries a word and a mark. */
+  --color-pass: #14584c;
+  --color-fail: #8f1d13;
+
   --font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Inclusive Sans', ui-sans-serif, system-ui, sans-serif;
 
@@ -153,9 +160,11 @@
    3. Wrapped in prefers-reduced-motion: no-preference, per the site's motion
       policy. Reduced motion means full ink, immediately.
 
-   The timeline is declared on the paragraph and referenced by the word spans,
-   so all words share one progress — otherwise each word would time against its
-   own position and the stagger would collapse. */
+   The timeline is declared once on the block that wraps *all* the statements,
+   not on each paragraph, and the word spans reference it. So every word in the
+   block times against one shared progress and the highlight runs line after
+   line through the whole block; a per-paragraph timeline would restart the
+   sweep on each paragraph. */
 @layer components {
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
@@ -164,12 +173,12 @@
         view-timeline-axis: block;
       }
 
-      .highlight-scroll > span {
+      .highlight-word {
         color: var(--color-ink-faint);
         animation: highlight-text linear both;
         animation-timeline: --highlight-text;
-        /* Each word gets a 12% window, offset by its position in the sentence,
-           so the highlight sweeps left to right as the block scrolls up. */
+        /* Each word gets a 12% window, offset by its position in the block,
+           so the highlight sweeps word by word as the block scrolls up. */
         animation-range: cover calc(16% + (var(--word-index) / var(--word-count)) * 44%)
           cover calc(28% + (var(--word-index) / var(--word-count)) * 44%);
       }

@@ -1,4 +1,5 @@
 import tailwindcss from '@tailwindcss/vite'
+import { toolRoutes } from './data/tools'
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -60,7 +61,16 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: ['/', '/work', '/journal', '/about', '/privacy', '/imprint'],
+      routes: [
+        '/',
+        '/work',
+        '/journal',
+        '/about',
+        '/privacy',
+        '/imprint',
+        '/tools',
+        ...toolRoutes,
+      ],
     },
   },
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const nav = [
   { label: 'Work', to: '/work' },
+  { label: 'Tools', to: '/tools' },
   { label: 'Journal', to: '/journal' },
   { label: 'About', to: '/about' },
 ]

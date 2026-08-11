@@ -20,5 +20,7 @@ useHead({
     </main>
 
     <SiteFooter />
+
+    <ToastHost />
   </div>
 </template>
