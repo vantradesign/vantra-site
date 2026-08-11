@@ -1,0 +1,139 @@
+@import 'tailwindcss';
+
+/* Design-token layer.
+   Authored as CSS custom properties on purpose: this makes the site's own
+   tokens readable by @vantra-design/core's parseTokenSchema(), so Vantra can
+   govern its own marketing site with its own tooling. */
+@theme {
+  --color-paper: #f5f2f3;
+  --color-ink: #001619;
+  --color-blue: #021f94;
+  --color-cyan: #50e8f4;
+  --color-cyan-soft: #c7f8fe;
+
+  /* Explicit values, not color-mix(): both are text colours and both are
+     verified against paper. muted 6.67:1, faint 4.74:1 — the caption tier is
+     13px, so it needs the full 4.5:1, not the large-text allowance. */
+  --color-ink-muted: #4a585a;
+  --color-ink-faint: #626e70;
+  --color-rule: color-mix(in oklab, #001619 12%, transparent);
+
+  --font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inclusive Sans', ui-sans-serif, system-ui, sans-serif;
+
+  /* Six steps. Deliberately no h5/h6 tier. */
+  --text-cover: clamp(2.75rem, 9vw, 7.5rem);
+  --text-cover--line-height: 0.95;
+  --text-cover--letter-spacing: -0.025em;
+
+  --text-display: clamp(2.25rem, 5.5vw, 4rem);
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.02em;
+
+  --text-title: clamp(1.625rem, 3vw, 2.5rem);
+  --text-title--line-height: 1.1;
+  --text-title--letter-spacing: -0.015em;
+
+  --text-lead: clamp(1.1875rem, 1.6vw, 1.625rem);
+  --text-lead--line-height: 1.45;
+
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.65;
+
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.4;
+  --text-caption--letter-spacing: 0.08em;
+
+  --spacing-gutter: clamp(1.25rem, 6vw, 7.5rem);
+  --spacing-section: clamp(6rem, 13vw, 12.5rem);
+
+  --ease-editorial: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-cyan);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Editorial measure: text never runs wider than a magazine column. */
+@utility measure {
+  max-width: 60ch;
+}
+
+@utility measure-tight {
+  max-width: 44ch;
+}
+
+@utility gutter {
+  padding-inline: var(--spacing-gutter);
+}
+
+@utility caption {
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+/* Scroll reveal. Opacity + 12px rise, once, 600ms. The hidden state is only
+   applied when the observer has claimed the element (data-reveal="pending"),
+   so content stays visible if JS never runs. */
+@layer components {
+  [data-reveal='pending'] {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  [data-reveal='shown'] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 600ms var(--ease-editorial),
+      transform 600ms var(--ease-editorial);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal='pending'] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
