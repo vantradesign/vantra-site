@@ -10,7 +10,7 @@ export const products: Product[] = [
     summary:
       'A browser extension that finds contrast and ARIA failures on the page you are looking at, and proposes the fix locally.',
     status: 'in-development',
-    license: 'GPL-3.0',
+    license: 'MPL-2.0',
     mood: {
       src: '/editorial/01-auto-fixer-studio.avif',
       alt: 'A laptop on a plaster worktop in daylight, its screen showing the Accessibility Auto-Fixer panel with three contrast failures marked on a live page.',

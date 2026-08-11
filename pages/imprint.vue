@@ -19,10 +19,10 @@ useSeoMeta({
         <section>
           <h2 class="caption">Responsible for content</h2>
           <p class="mt-4 measure text-ink-muted">
-            [Full name]<br />
-            [Street and number]<br />
-            [Postal code and city]<br />
-            [Country]
+            Kai Kauper<br />
+            Humboldtstr. 3<br />
+            71032 Böblingen<br />
+            Germany
           </p>
         </section>
 
@@ -31,11 +31,6 @@ useSeoMeta({
           <p class="mt-4">
             <AppLink to="mailto:hello@vantra.design">hello@vantra.design</AppLink>
           </p>
-        </section>
-
-        <section>
-          <h2 class="caption">VAT identification number</h2>
-          <p class="mt-4 measure text-ink-muted">[If applicable]</p>
         </section>
 
         <section>
