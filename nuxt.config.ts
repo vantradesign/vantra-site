@@ -66,6 +66,7 @@ export default defineNuxtConfig({
         '/work',
         '/journal',
         '/about',
+        '/how-it-works',
         '/privacy',
         '/imprint',
         '/tools',

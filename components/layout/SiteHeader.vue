@@ -2,6 +2,7 @@
 const nav = [
   { label: 'Work', to: '/work' },
   { label: 'Tools', to: '/tools' },
+  { label: 'How it works', to: '/how-it-works' },
   { label: 'Journal', to: '/journal' },
   { label: 'About', to: '/about' },
 ]
