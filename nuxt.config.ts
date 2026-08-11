@@ -17,8 +17,44 @@ export default defineNuxtConfig({
   // <LayoutSiteHeader />.
   components: [{ path: '~/components', pathPrefix: false }],
 
+  // Both families are pinned to the `local` provider, resolved from the .woff2
+  // files in public/fonts/. Pinning is deliberate: if a file is ever renamed or
+  // missing, the build surfaces it instead of silently falling back to
+  // downloading from Google. @nuxt/fonts also emits metric-matched fallback
+  // faces, which is what keeps CLS at zero while the webfont loads.
+  fonts: {
+    // Required with Tailwind v4. The families are only ever named inside @theme
+    // custom properties (--font-display / --font-sans); every real font-family
+    // declaration resolves to var(--font-display). Without this flag the scanner
+    // finds no family names, emits no @font-face, and the site silently falls
+    // back to system sans.
+    experimental: {
+      processCSSVariables: true,
+    },
+    defaults: {
+      weights: [400, 700],
+      styles: ['normal', 'italic'],
+      subsets: ['latin'],
+    },
+    families: [
+      // Preloaded: the hero cover line is set in this family at a huge size and
+      // is anchored to the bottom of a full-bleed frame. Metric-matched
+      // fallbacks correct height but not width, so a late swap re-breaks the
+      // lines and the whole block jumps. Preloading removes that shift.
+      { name: 'Bricolage Grotesque', preload: true },
+      // Body copy: small, top-anchored, and fully covered by the metric
+      // fallback. Not worth a preload slot competing with the hero image.
+      { name: 'Inclusive Sans' },
+    ],
+  },
+
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      watch: {
+        ignored: ['**/node_modules/**', '**/.output/**', '**/dist/**'],
+      },
+    },
   },
 
   nitro: {
@@ -33,21 +69,6 @@ export default defineNuxtConfig({
   // /login, which would break every public page. See README § Supabase.
   supabase: {
     redirect: false,
-  },
-
-  fonts: {
-    // @nuxt/fonts downloads and self-hosts these at build time, so there is no
-    // request to fonts.googleapis.com at runtime. To swap in licensed local
-    // files later, drop the .woff2 files into `public/fonts/` — the `local`
-    // provider is checked before `google` and wins automatically.
-    defaults: {
-      weights: [400, 500, 700],
-      styles: ['normal', 'italic'],
-    },
-    families: [
-      { name: 'Bricolage Grotesque', provider: 'google' },
-      { name: 'Inclusive Sans', provider: 'google' },
-    ],
   },
 
   image: {
@@ -81,7 +102,21 @@ export default defineNuxtConfig({
         },
         { name: 'theme-color', content: '#f5f2f3' },
       ],
-      link: [{ rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
+      link: [
+        { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
+        // @nuxt/fonts preloads weight 400 only, but every hero and page
+        // headline is set at 700. Without this the display font arrives after
+        // first paint, re-breaks the cover line, and shifts the bottom-anchored
+        // hero block (~0.04 CLS). Path is stable: these files are served
+        // straight from public/fonts, unhashed.
+        {
+          rel: 'preload',
+          as: 'font',
+          type: 'font/woff2',
+          href: '/fonts/bricolage-grotesque-700-normal.woff2',
+          crossorigin: '',
+        },
+      ],
     },
   },
 })

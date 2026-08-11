@@ -40,17 +40,60 @@ The site should read as a magazine, not a SaaS landing page.
   rarely centred, never full width. Outer margin is the `gutter` utility.
 - **Rhythm.** `mt-section` (`clamp(6rem, 13vw, 12.5rem)`) between sections. Never
   two same-typed sections adjacent: image, then text, then image, then pull-quote.
-- **Motion.** Opacity plus a 12px rise, 600ms, once, via `useScrollReveal`. No
-  parallax, no scale, no bounce. Everything is disabled under
+- **Motion.** Two patterns only. Sections enter with opacity plus a 12px rise,
+  600ms, once, via `useScrollReveal`. The home-page manifesto uses a
+  scroll-driven word highlight (`HighlightText` + `.highlight-scroll`), where
+  words run from muted to full ink as the block crosses the viewport. No
+  parallax, no scale, no bounce. Both are disabled under
   `prefers-reduced-motion`.
 
-### Fonts are self-hosted
+### The scroll highlight
 
-`@nuxt/fonts` downloads Bricolage Grotesque and Inclusive Sans at build time, so
-no request goes to Google at runtime. To move to licensed files, drop the
-`.woff2` files into `public/fonts/` using the family name as the filename — the
-`local` provider is resolved before `google` and takes over automatically. No
-config change, no `@font-face` block to write.
+`.highlight-scroll` in `assets/css/main.css` is a CSS `view()` timeline — no
+scroll listener, no JS, nothing on the main thread. Three things about it are
+deliberate and should survive any redesign:
+
+- **The muted state still passes contrast.** It is `--color-ink-faint`, 4.74:1 on
+  paper. The copy is legible before it is highlighted; the effect adds emphasis
+  rather than withholding readability.
+- **It is wrapped in `@supports (animation-timeline: view())`.** Browsers without
+  scroll-driven animations (Firefox, at the time of writing) render every word at
+  full ink instead of leaving the paragraph permanently muted.
+- **The timeline is declared on the paragraph, not the words.** Each word
+  references the shared timeline via `animation-range`; if the words each owned a
+  `view()` timeline they would time against their own positions and the sweep
+  would collapse.
+
+Tuning lives in one declaration: `animation-range` start offset (16%), window
+width (12%), and total spread (44%).
+
+### Fonts
+
+The `.woff2` files live in `public/fonts/`, named `family-weight-style.woff2`
+(e.g. `bricolage-grotesque-700-normal.woff2`). `@nuxt/fonts` scans that directory,
+generates the `@font-face` rules, and adds metric-matched fallback faces
+(`size-adjust`, `ascent-override`) so the layout holds while a font loads.
+Nothing is requested from Google at runtime, and there are no hand-written
+`@font-face` blocks — adding them back would skip the fallback faces.
+
+Two non-obvious requirements, both easy to break:
+
+1. **`experimental.processCSSVariables: true` is mandatory here.** With Tailwind
+   v4 the families are only ever *named* inside `@theme` (`--font-display`,
+   `--font-sans`); every real `font-family` declaration compiles to
+   `var(--font-display)`. Without the flag `@nuxt/fonts` finds no family names,
+   emits **no `@font-face` at all**, and the site silently renders in system
+   sans. Symptom: `.nuxt/nuxt-fonts-global.css` is 0 bytes.
+2. **Weight 700 is preloaded by hand** in `app.head.link`. The module preloads
+   weight 400 only, but every hero and page headline is 700. Because the hero
+   cover line is anchored to the *bottom* of a full-bleed frame, a late swap
+   re-breaks its lines and shifts the whole block — metric fallbacks correct
+   height, not width. That was worth 0.04 CLS on the home page; the preload
+   returns it to 0.
+
+Do not pin `provider: 'local'` on these families. That selects the
+*system-installed* font provider, which emits `src: local(...)` only and never
+references the files in `public/fonts/`.
 
 ### Design tokens
 

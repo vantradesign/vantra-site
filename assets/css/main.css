@@ -25,6 +25,7 @@
   --text-cover: clamp(2.75rem, 9vw, 7.5rem);
   --text-cover--line-height: 0.95;
   --text-cover--letter-spacing: -0.025em;
+  --text-cover--font-weight: 700;
 
   --text-display: clamp(2.25rem, 5.5vw, 4rem);
   --text-display--line-height: 1;
@@ -137,3 +138,56 @@
     }
   }
 }
+
+/* Scroll-driven word highlight, used for the manifesto on the home page.
+   Words run from muted to full ink as the block crosses the viewport.
+
+   Pure CSS: a view() timeline, no scroll listener, no JS, nothing on the main
+   thread. Three deliberate guarantees:
+
+   1. The muted state is --color-ink-faint (#626e70), 4.74:1 on paper. The copy
+      passes WCAG AA *before* it is highlighted, so the effect never trades
+      legibility for atmosphere.
+   2. Wrapped in @supports, so browsers without scroll-driven animations render
+      every word at full ink rather than leaving the paragraph stuck muted.
+   3. Wrapped in prefers-reduced-motion: no-preference, per the site's motion
+      policy. Reduced motion means full ink, immediately.
+
+   The timeline is declared on the paragraph and referenced by the word spans,
+   so all words share one progress — otherwise each word would time against its
+   own position and the stagger would collapse. */
+@layer components {
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .highlight-scroll {
+        view-timeline-name: --highlight-text;
+        view-timeline-axis: block;
+      }
+
+      .highlight-scroll > span {
+        color: var(--color-ink-faint);
+        animation: highlight-text linear both;
+        animation-timeline: --highlight-text;
+        /* Each word gets a 12% window, offset by its position in the sentence,
+           so the highlight sweeps left to right as the block scrolls up. */
+        animation-range: cover calc(16% + (var(--word-index) / var(--word-count)) * 44%)
+          cover calc(28% + (var(--word-index) / var(--word-count)) * 44%);
+      }
+    }
+  }
+
+  @keyframes highlight-text {
+    from {
+      color: var(--color-ink-faint);
+    }
+    to {
+      color: var(--color-ink);
+    }
+  }
+}
+
+/* No @font-face rules here by design. @nuxt/fonts generates them from the files
+   in public/fonts/, together with metric-matched fallback faces (size-adjust,
+   ascent-override) that hold the layout steady while the webfont loads. Writing
+   the faces by hand skips those fallbacks and costs ~0.04 CLS.
+   Family declarations live in nuxt.config.ts. */

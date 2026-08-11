@@ -8,7 +8,7 @@ useSeoMeta({
 <template>
   <div class="gutter pt-16 md:pt-24">
     <p class="caption">Imprint</p>
-    <h1 class="mt-8 font-display text-display max-w-[24ch] text-balance">
+    <h1 class="mt-8 font-display text-display font-bold max-w-[24ch] text-balance">
       Legal disclosure.
     </h1>
 
