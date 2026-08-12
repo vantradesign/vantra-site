@@ -51,6 +51,8 @@ const principles = [
       />
     </section>
 
+    <ToolShelf />
+
     <PullQuote kicker="Principles" :principles="principles" />
 
     <section class="gutter mt-section">
