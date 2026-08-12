@@ -1,1 +1,7 @@
-{ }
+{
+  "vantra-core": "41a7e797fbe51515a23712c50ca239d846d9aff3",
+  "vantra-governance-suite": "fe8afe279c6dd5ace0df836a0d5ea6b029d127e9",
+  ".github": "588c33a90dedacd4d1574fd71efe5672f1e1b597",
+  "vantra-maturity-check": "0f8a1089455fed593e4b47608155ed59ef73189e",
+  "vantra-a11y-fixer": "c64dd2a5a90e2b3e79bff059953b8fc2a88263dd"
+}
