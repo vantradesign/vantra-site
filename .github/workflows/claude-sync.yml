@@ -1,0 +1,89 @@
+# Triggered once the watcher workflow (watch-org.yml) detects a change
+# in the vantradesign organization, and starts Claude Code in unattended
+# automation mode with the CLAUDE.md context.
+#
+# IMPORTANT: The exact input parameters of anthropics/claude-code-action
+# may change between versions. Always check the current README at
+# https://github.com/anthropics/claude-code-action against the fields
+# below before the first run.
+
+name: Vantra Site Auto-Sync (Claude Code)
+
+on:
+  repository_dispatch:
+    types: [vantra-org-update]
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: "Optional manual test payload (JSON)"
+        required: false
+        default: '{"org":"vantradesign","changes":[]}'
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: vantra-site-claude-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout vantra-site
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate app token instead of default GITHUB_TOKEN
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.VANTRA_BOT_APP_ID }}
+          private-key: ${{ secrets.VANTRA_BOT_PRIVATE_KEY }}
+
+      - name: Determine payload
+        id: payload
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            echo 'json<<EOF' >> "$GITHUB_OUTPUT"
+            echo '${{ toJson(github.event.client_payload) }}' >> "$GITHUB_OUTPUT"
+            echo 'EOF' >> "$GITHUB_OUTPUT"
+          else
+            echo 'json<<EOF' >> "$GITHUB_OUTPUT"
+            echo '${{ github.event.inputs.payload }}' >> "$GITHUB_OUTPUT"
+            echo 'EOF' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run Claude Code sync
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ steps.app-token.outputs.token }}
+          mode: agent
+          prompt: |
+            You are Staff Information Architect, Staff Software Architect,
+            and Staff Software Engineer for the vantra-site repository.
+            First read CLAUDE.md in the repo root to understand the project
+            context, content model, and behavior rules, and follow them
+            strictly.
+
+            Here is the trigger payload from the organization watcher
+            (vantradesign) describing what changed:
+
+            ${{ steps.payload.outputs.json }}
+
+            For each entry in "changes", analyze whether an update to
+            vantra-site is warranted (new repo -> new entry, changed
+            commits -> update existing content). Do not act on purely
+            technical changes with no external impact.
+
+            Implement all updates according to CLAUDE.md: use a dedicated
+            branch, ensure build/lint/typecheck pass, then open a pull
+            request with a thorough description. Never merge yourself.
+            If no change is needed, do not open a PR and briefly summarize
+            why not.
+          claude_args: |
+            --max-turns 60

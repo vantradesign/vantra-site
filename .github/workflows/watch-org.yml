@@ -1,0 +1,60 @@
+# Watches for new repos or new commits in the vantradesign organization.
+# On changes, it triggers the claude-sync.yml workflow in THIS repo via
+# repository_dispatch.
+#
+# MODES:
+# - Production mode (default below): runs once a day automatically via
+#   the "schedule" trigger, and can additionally be run manually anytime
+#   via "workflow_dispatch".
+# - Dev / manual-only mode: comment out (or delete) the entire "schedule:"
+#   block below. Only "workflow_dispatch" will remain, so the workflow
+#   never runs on its own — only when you trigger it yourself from the
+#   Actions tab ("Run workflow"). This is the recommended mode while you
+#   are still testing/adjusting CLAUDE.md, the script, or the Claude
+#   action parameters, so you don't burn API calls or open unwanted PRs
+#   on a fixed schedule.
+
+name: Watch vantradesign Organization
+
+on:
+  # schedule:
+    # Runs once a day at 06:00 UTC. Adjust the hour as needed.
+    # To switch to pure dev/manual-only mode, comment out this whole
+    # "schedule:" block (both lines below) and keep only workflow_dispatch.
+    # - cron: "0 6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout vantra-site
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run watcher script
+        id: diff
+        env:
+          GH_TOKEN: ${{ secrets.ORG_WATCH_TOKEN }}
+        run: bash scripts/watch_org.sh
+
+      - name: Trigger sync workflow if changes were found
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.ORG_WATCH_TOKEN }}
+        run: |
+          jq -n --slurpfile payload state/last-change-payload.json \
+            '{event_type: "vantra-org-update", client_payload: $payload[0]}' \
+            | gh api repos/vantradesign/vantra-site/dispatches --input -
+
+      - name: Commit updated state file
+        run: |
+          git config user.name "vantra-org-watcher"
+          git config user.email "actions@users.noreply.github.com"
+          git add state/repo-state.json
+          git diff --cached --quiet || git commit -m "chore: update org state snapshot [skip ci]"
+          git push
