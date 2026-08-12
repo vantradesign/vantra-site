@@ -33,7 +33,7 @@ export const chapters: Chapter[] = [
     id: 'the-tools',
     index: '03',
     title: 'The tools',
-    teaser: 'Ten small utilities and three larger products, and how to tell which one you need.',
+    teaser: 'Ten small utilities and four larger products, and how to tell which one you need.',
   },
   {
     id: 'governance',

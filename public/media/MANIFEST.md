@@ -14,6 +14,14 @@ product page would misrepresent the product.
 | `side-panel.avif` | The side panel with several findings expanded, showing rule, measured ratio and required threshold. | 16:10 |
 | `diff-view.mp4` + `.avif` poster | A suggested colour fix shown as a diff, then applied to the preview. Must show that nothing changes until accepted. | 16:9 |
 
+### `design-system-maturity-check/`
+
+| File | What to record | Ratio |
+| --- | --- | --- |
+| `interactive-run.mp4` + `.avif` poster | The terminal assessment being answered: a few questions selected by keyboard, one with its help text expanded. Real answers, no fast-forward. | 16:9 |
+| `report.avif` | The finished report: four dimension scores with their level names, each followed by its three effort-tagged next steps. | 16:10 |
+| `comparison.avif` | A second run started with `--from` an earlier export, showing the per-dimension delta. | 16:10 |
+
 ## Capture and encode rules
 
 1. **Record at 2× device pixel ratio**, browser chrome cropped out, on the

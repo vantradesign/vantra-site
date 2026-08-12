@@ -155,6 +155,102 @@ export const products: Product[] = [
     roadmap: 'Planned. Part of the Vantra governance suite.',
     links: [{ label: 'Follow on GitHub', href: 'https://github.com/vantradesign' }],
   },
+  {
+    slug: 'design-system-maturity-check',
+    name: 'Design System Maturity Check',
+    index: '04',
+    accent: 'cyan',
+    coverLine: 'A level is worthless without the three things to do on Monday.',
+    summary:
+      'A 24-question self-assessment that scores a design system across documentation, versioning, governance and adoption, and returns level-appropriate next steps for each.',
+    status: 'in-development',
+    license: 'MIT',
+    mood: {
+      src: '/editorial/04-maturity-check-studio.avif',
+      alt: 'A terminal on a plaster worktop showing the Maturity Check report: four dimension scores beside their next steps.',
+      focal: '50% 45%',
+      placeholder: true,
+    },
+    problem:
+      'Most maturity models are a slide with five columns and no instructions. They tell a team it is level 2 and leave it there, which is the least useful half of the exercise: the gap was never the diagnosis, it was knowing which three things to change before the next quarter. Worse, the advice that does exist is written for a system that already has a design council and a token pipeline — level-5 answers handed to a team that still has no changelog.',
+    howItWorks: [
+      {
+        heading: 'The score exists to select the advice.',
+        body: 'Every level in every dimension carries three concrete, effort-tagged next steps written for a team at exactly that level. A level-2 team is never handed level-5 advice, because the number is a lookup key, not a verdict.',
+      },
+      {
+        heading: 'Four dimensions, one question each.',
+        body: 'Documentation: can a new team use a component without asking anyone? Versioning: can you ship a breaking change without breaking trust? Governance: who decides, how fast, and is that written down? Adoption: do teams actually use it, and do you know?',
+      },
+      {
+        heading: 'The arithmetic is deliberately boring.',
+        body: 'Answers are worth one to five points, questions carry a weight of one to three, and a category score is the weighted mean of the questions that were answered. The overall score is the unweighted mean of the four categories, so no dimension wins by having more questions. An honest “I don’t know” is skipped, never counted as zero.',
+      },
+      {
+        heading: 'The export is the database.',
+        body: 'There is no account and no server, so a JSON export is the persistence layer. Re-import last quarter’s file and the report renders the delta. Free-text notes stay in the local export and are never encoded into a share link.',
+      },
+      {
+        heading: 'The catalog is data, not code.',
+        body: 'Questions, weights and next steps are plain JSON validated against a published schema. The same engine can assess API governance or content operations by swapping the catalog — which is also how a team replaces our wording with their own.',
+      },
+    ],
+    media: [
+      {
+        kind: 'video',
+        src: '/media/design-system-maturity-check/interactive-run.mp4',
+        poster: '/media/design-system-maturity-check/interactive-run.avif',
+        alt: 'Screen recording: the terminal assessment being answered question by question, with the help text expanded on one of them.',
+        caption: 'The interactive run. Twenty-four questions, keyboard only, roughly ten minutes.',
+        ratio: '16 / 9',
+        placeholder: true,
+      },
+      {
+        kind: 'image',
+        src: '/media/design-system-maturity-check/report.avif',
+        alt: 'The rendered report: four dimension scores with their level names, each followed by three effort-tagged next steps.',
+        caption: 'The report. Four scores, and twelve things to do — sorted by effort, not by severity.',
+        ratio: '16 / 10',
+        placeholder: true,
+      },
+      {
+        kind: 'image',
+        src: '/media/design-system-maturity-check/comparison.avif',
+        alt: 'A second run compared against an earlier JSON export, showing the change in each dimension.',
+        caption: 'A quarter later, compared against the earlier export. No database was involved.',
+        ratio: '16 / 10',
+        placeholder: true,
+      },
+    ],
+    transparency: {
+      automatic: [
+        'A weighted score per dimension, and an overall score that weights each dimension equally.',
+        'A level band from 1 (Ad hoc) to 5 (Optimising), with the threshold that produced it stated in the report.',
+        'Three next steps per dimension, selected for the level reached and tagged with the effort they take.',
+        'The delta against an earlier JSON export, dimension by dimension.',
+      ],
+      manual: [
+        'Whether the answers are honest. This is a self-assessment; nothing reads your repository to check.',
+        'Whether a practice that exists on paper is actually followed by the teams using the system.',
+        'Whether a low score matters here. A two-person team with one product may be right to stay at level 2.',
+        'Which of the three next steps is politically possible this quarter.',
+      ],
+      locality:
+        'Everything runs in your terminal. No account, no telemetry, no network call — the questions ship with the binary and the report is rendered locally. The only thing that ever leaves is a file you exported on purpose.',
+    },
+    roadmap:
+      'CLI in development, first release pending. Next: a static web version running the same engine, so a workshop can answer it on a screen instead of a laptop. After that, published reference catalogs beyond design systems.',
+    links: [
+      {
+        label: 'Source on GitHub',
+        href: 'https://github.com/vantradesign/vantra-maturity-check',
+      },
+      {
+        label: 'Catalog authoring guide',
+        href: 'https://github.com/vantradesign/vantra-maturity-check/blob/main/CONTRIBUTING.md',
+      },
+    ],
+  },
 ]
 
 export function findProduct(slug: string): Product | undefined {

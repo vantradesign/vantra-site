@@ -51,6 +51,7 @@ backgrounds, no glossy reflections, no clutter.
 | `01-auto-fixer-studio.avif` | `/` + `/work` entry 01 | Same laptop, side panel open on the findings list / oak worktop, linen cloth | **placeholder** |
 | `02-design-reviewer-studio.avif` | `/` + `/work` entry 02 | Display showing a component diff, two button variants / studio desk, low daylight | **placeholder** |
 | `03-deprecation-studio.avif` | `/` + `/work` entry 03 | Screen showing a dependency graph, one node marked for removal / folded print-out on linen | **placeholder** |
+| `04-maturity-check-studio.avif` | `/` + `/work` entry 04 | Terminal showing the Maturity Check report, four dimension scores beside their next steps / plaster worktop, morning light | **placeholder** |
 | `10-studio-detail.avif` | `/about` | Token file on screen beside a printed component inventory / desk detail | **placeholder** |
 | `20-governance-desk.avif` | `/how-it-works` ch. 04 | Screen showing a deprecation timeline, one component marked for removal, beside a printed list of its remaining consumers / desk in daylight | **placeholder** |
 
