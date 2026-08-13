@@ -6,6 +6,19 @@
 # may change between versions. Always check the current README at
 # https://github.com/anthropics/claude-code-action against the fields
 # below before the first run.
+#
+# Authentication runs on an existing Claude Pro/Max subscription rather
+# than pay-per-token API billing. To (re-)create the secret:
+#
+#   1. npm install -g @anthropic-ai/claude-code
+#   2. claude  ->  /login  ->  choose the Claude.ai (Pro/Max) login,
+#      NOT the Anthropic Console API login
+#   3. claude setup-token          # long-lived OAuth token, bound to the plan
+#   4. Store the result in this repo as the secret
+#      CLAUDE_CODE_OAUTH_TOKEN    (ANTHROPIC_API_KEY is then unused)
+#
+# The token expires eventually; re-run step 3 and update the secret when
+# the job starts failing to authenticate.
 
 name: Vantra Site Auto-Sync (Claude Code)
 
@@ -37,6 +50,27 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Claude is asked to verify its own changes with pnpm, so the toolchain
+      # has to exist before the action runs. pnpm/action-setup reads the
+      # version from "packageManager" in package.json.
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      # @nuxtjs/supabase fails at startup without these, and `nuxt prepare`
+      # runs on postinstall. The public site never calls Supabase, so the
+      # placeholders from .env.example are sufficient for a build.
+      - name: Provide build env
+        run: cp .env.example .env
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Generate app token instead of default GITHUB_TOKEN
         id: app-token
         uses: actions/create-github-app-token@v2
@@ -60,7 +94,7 @@ jobs:
       - name: Run Claude Code sync
         uses: anthropics/claude-code-action@v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ steps.app-token.outputs.token }}
           mode: agent
           prompt: |
@@ -81,8 +115,10 @@ jobs:
             technical changes with no external impact.
 
             Implement all updates according to CLAUDE.md: use a dedicated
-            branch, ensure build/lint/typecheck pass, then open a pull
-            request with a thorough description. Never merge yourself.
+            branch, then verify with `pnpm run tsc` and `pnpm run generate`
+            (there is no lint script; dependencies are already installed),
+            then open a pull request with a thorough description. Never
+            merge yourself.
             If no change is needed, do not open a PR and briefly summarize
             why not.
           claude_args: |
