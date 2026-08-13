@@ -1,0 +1,51 @@
+# Security headers for Cloudflare Pages.
+#
+# `nuxt generate` copies public/ verbatim into the output root, which is where
+# Pages looks for this file. Nothing here is enforced at build time, so changes
+# must be verified against the deployed response, not assumed.
+#
+# The policy is strict because the site earns it: every page is prerendered,
+# fonts are self-hosted (public/fonts), there is no analytics, no third-party
+# script and no outbound request to any third party. If any of that changes, this
+# file changes with it — see docs note in server/api/README.md. The single
+# exception is a loopback connect-src, explained below.
+#
+# `style-src 'unsafe-inline'`: the tools bind computed colours through :style
+# (pages/tools/contrast-checker.vue, components/tools/ColorPickerField.vue), which
+# is inline style by construction. Low risk here because no untrusted input
+# reaches a style sink — every value is a normalised hex from utils/tools/color.ts —
+# but it is a deliberate exception, not an oversight.
+#
+# `script-src 'self'`: verify against a real `nuxt generate` output. If Nuxt emits
+# an inline hydration script, add its sha256 hash here rather than reaching for
+# 'unsafe-inline'. The hashes are injected at build time by
+# scripts/inject-csp-hashes.mjs, which rewrites this directive and nothing else.
+#
+# `connect-src 'self' http://localhost:11434 http://127.0.0.1:11434`: the one
+# outbound exception on the whole site, added for the prompt field of
+# /tools/layout-builder. It is a loopback address, so the request cannot leave the
+# visitor's own machine — the claim that nothing leaves the browser still holds,
+# which is exactly why that tool talks to a local Ollama and refuses to accept a
+# hosted API key. If a hosted provider is ever added, this line stops being
+# defensible and the copy on /tools and /about has to change with it.
+#
+# Loopback is exempt from mixed-content blocking (it counts as a potentially
+# trustworthy origin), so an https page may call it. Ollama still has to opt in
+# to the origin itself: `OLLAMA_ORIGINS=https://vantra.design ollama serve`.
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' http://localhost:11434 http://127.0.0.1:11434; form-action 'none'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; manifest-src 'self'
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  X-Frame-Options: DENY
+
+# Fonts are immutable and fingerprint-free, so they are safe to cache hard.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/_nuxt/*
+  Cache-Control: public, max-age=31536000, immutable

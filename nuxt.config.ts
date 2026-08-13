@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   // below — no route, component or composable has to be rewritten.
   ssr: true,
 
-  modules: ['@nuxt/image', '@nuxt/fonts', '@nuxtjs/supabase'],
+  modules: ['@nuxt/image', '@nuxt/fonts'],
 
   css: ['~/assets/css/main.css'],
 
@@ -83,12 +83,10 @@ export default defineNuxtConfig({
     },
   },
 
-  // Dormant for this phase. `redirect: false` is required: the module would
-  // otherwise install a global middleware that redirects anonymous visitors to
-  // /login, which would break every public page. See README § Supabase.
-  supabase: {
-    redirect: false,
-  },
+  // [Security] `@nuxtjs/supabase` was removed here: it shipped supabase-js to
+  // every visitor of a fully static site with no auth-gated feature, and left a
+  // site-wide anonymous redirect one config flag away. Re-add it together with
+  // the first feature that actually authenticates — see server/api/README.md.
 
   image: {
     format: ['avif', 'webp'],

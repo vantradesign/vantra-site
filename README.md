@@ -208,25 +208,32 @@ identically under SSR.
 
 ## Supabase
 
-`@nuxtjs/supabase` is installed and configured now, and deliberately does
-nothing yet.
+**Not installed.** `@nuxtjs/supabase` was removed deliberately.
 
-- `SUPABASE_URL` and `SUPABASE_KEY` are required from day one — the module fails
-  at startup without them. Placeholder values are fine while no feature calls
-  Supabase.
-- `supabase: { redirect: false }` in `nuxt.config.ts` is **required**. The module
-  otherwise installs a global middleware that redirects anonymous visitors to
-  `/login`, which would break every public page.
+It had been added ahead of need, and the cost was real: `supabase-js` shipped in
+the client bundle of a fully static site with no authenticated feature, a
+security-relevant dependency sat active-but-unused on the public surface, and
+`supabase: { redirect: false }` was load-bearing — the module's default installs
+a global middleware that redirects every anonymous visitor to `/login`, so one
+flag stood between the config and taking every public page offline. It also made
+a `.env` mandatory for local development of a site that reads no data.
+
+- No Supabase environment variables are required. `pnpm install` and `pnpm dev`
+  work with no `.env` at all.
 - `server/api/` is scaffolded and documented but empty. See
   `server/api/README.md` for the routes it is reserved for.
+
+Re-add the module together with the first feature that actually authenticates —
+not before. At that point it is a one-line `modules` entry plus the credentials.
 
 ### Adding accounts and payments
 
 No separate auth provider is needed, and no restructuring:
 
-1. **Auth.** Supabase handles sign-in. Use `useSupabaseUser()` in components and
-   re-enable `redirect` (or add per-route middleware) for the pages that need
-   gating. Public editorial pages stay untouched.
+1. **Auth.** Re-add `@nuxtjs/supabase`, which handles sign-in. Use
+   `useSupabaseUser()` in components and add per-route middleware for the pages
+   that need gating — prefer that over re-enabling the global `redirect`, so a
+   public editorial page can never be gated by accident.
 2. **State.** User and subscription records live in Supabase, protected by
    row-level security, so entitlement checks are a query rather than
    application logic.
@@ -249,7 +256,11 @@ deployments per pull request.
 
 - Build command: `pnpm generate`
 - Output directory: `.output/public`
-- Environment variables: `SUPABASE_URL`, `SUPABASE_KEY`
+- Environment variables: none required.
+- Security headers: `public/_headers` is copied verbatim into the output root and
+  read by Cloudflare Pages. It sets the CSP, HSTS and `Referrer-Policy`. Verify
+  it against the deployed response after any change to scripts or fonts — the
+  file is not validated at build time.
 
 ### Performance budget
 
