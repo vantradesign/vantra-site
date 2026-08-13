@@ -97,6 +97,20 @@ const fluidSteps = computed(() =>
   }),
 )
 
+/**
+ * [A11y] Spoken form of the fluid range.
+ *
+ * The visible sentence beside the sliders is no longer a live region: it
+ * recomputes on every step of a viewport drag, and it shared the page with the
+ * ratio region above, so the two interrupted each other. This is the same
+ * information, debounced by ToolStatus.
+ */
+const fluidStatusText = computed(
+  () =>
+    `${nameOf(minRatioValue.value)} at ${range.value.minViewport}px, ` +
+    `${nameOf(maxRatioValue.value)} at ${range.value.maxViewport}px.`,
+)
+
 const sample = 'Design systems fail slowly'
 
 function staticStepCss(name: string, rem: number) {
@@ -237,10 +251,15 @@ const allCss = computed(() => {
           </div>
         </div>
 
-        <p class="caption mt-6 normal-case tracking-normal measure text-ink-muted" aria-live="polite">
+        <!-- Not live: this recomputes from the viewport sliders, so it announced
+             on every step and cut across the ratio region above. ToolStatus
+             debounces and reports where the drag landed. -->
+        <p class="caption mt-6 normal-case tracking-normal measure text-ink-muted">
           {{ nameOf(minRatioValue) }} at {{ range.minViewport }}px, {{ nameOf(maxRatioValue) }} at
           {{ range.maxViewport }}px. Every step interpolates between the two.
         </p>
+
+        <ToolStatus :text="fluidStatusText" />
 
         <div class="mt-12 max-w-xl">
           <ToolSlider

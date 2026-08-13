@@ -129,6 +129,42 @@ watch([ratioW, ratioH], () => {
   preset.value = match ?? ''
 })
 
+/**
+ * [A11y] One live region for three calculators.
+ *
+ * Each of the three results used to carry its own `aria-live`, which meant a
+ * bare fragment — "1440 px high" — with nothing saying which calculation it came
+ * from, and three regions recomputing from shared state so one edit queued
+ * several announcements that cut each other off.
+ *
+ * Only one calculator can change at a time, so a single region driven by
+ * whichever inputs moved says more with less noise. The name of the calculation
+ * leads, because that is the part the listener cannot infer.
+ */
+const statusText = ref('')
+
+watch([ratioW, ratioH, knownWidth], () => {
+  statusText.value =
+    derivedHeight.value === null
+      ? 'Ratio to dimension: enter values greater than zero.'
+      : `Ratio to dimension: ${derivedHeight.value} pixels high at ${knownWidth.value} pixels wide.`
+})
+
+watch([measuredWidth, measuredHeight], () => {
+  statusText.value = measuredRatio.value
+    ? `Dimension to ratio: ${formatRatioNotation(measuredRatio.value)}${
+        measuredName.value ? `, ${measuredName.value}` : ''
+      }.`
+    : 'Dimension to ratio: enter values greater than zero.'
+})
+
+watch([sourceWidth, sourceHeight, targetWidth], () => {
+  statusText.value =
+    resizedHeight.value === null
+      ? 'Proportional resize: enter values greater than zero.'
+      : `Proportional resize: ${resizedHeight.value} pixels high at ${targetWidth.value} pixels wide.`
+})
+
 const ratioResult = computed(() => {
   const w = positive(ratioW.value)
   const h = positive(ratioH.value)
@@ -224,7 +260,9 @@ const resizeResult = computed(() => {
               :error="widthError"
             />
 
-            <p class="font-display text-title tabular-nums" aria-live="polite">
+            <!-- Announced via the single ToolStatus region at the end of the
+                 section, which names the calculation as well as the number. -->
+            <p class="font-display text-title tabular-nums">
               {{ derivedHeight === null ? '—' : `${derivedHeight} px high` }}
             </p>
 
@@ -257,7 +295,7 @@ const resizeResult = computed(() => {
               suffix="px"
             />
 
-            <p class="font-display text-title tabular-nums" aria-live="polite">
+            <p class="font-display text-title tabular-nums">
               {{ measuredRatio ? formatRatioNotation(measuredRatio) : '—' }}
               <span v-if="measuredName" class="caption ml-3 text-ink-muted">
                 {{ measuredName }}
@@ -302,7 +340,7 @@ const resizeResult = computed(() => {
               suffix="px"
             />
 
-            <p class="font-display text-title tabular-nums" aria-live="polite">
+            <p class="font-display text-title tabular-nums">
               {{ resizedHeight === null ? '—' : `${resizedHeight} px high` }}
             </p>
 
@@ -315,6 +353,8 @@ const resizeResult = computed(() => {
           </div>
         </ToolPanel>
       </div>
+
+      <ToolStatus :text="statusText" />
     </section>
 
     <section aria-labelledby="preview-heading" class="gutter mt-section">

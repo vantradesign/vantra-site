@@ -97,6 +97,24 @@ const rows = computed(() =>
 
 const largest = computed(() => rows.value.at(-1)?.size || 1)
 
+/**
+ * [A11y] The viewport slider had an `aria-live` caption that never changed text
+ * — "Bars are drawn at the size each step resolves to at this width" — so the
+ * region could not fire, and the sizes that do change were announced nowhere.
+ *
+ * This reports what the slider actually did. Only meaningful in fluid mode; the
+ * static scale does not move with the viewport, so it stays silent rather than
+ * repeating itself.
+ */
+const statusText = computed(() => {
+  if (!isFluid.value) return ''
+
+  const smallest = rows.value[0]?.size
+  if (smallest === undefined) return ''
+
+  return `At ${simulated.value}px wide the scale runs from ${formatUnit(smallest, 1)}px to ${formatUnit(largest.value, 1)}px.`
+})
+
 const allCss = computed(() => {
   if (!isFluid.value) {
     return [
@@ -186,9 +204,11 @@ const allCss = computed(() => {
             :step="1"
             unit="px"
           />
-          <p class="caption mt-3 normal-case tracking-normal text-ink-muted" aria-live="polite">
+          <p class="caption mt-3 normal-case tracking-normal text-ink-muted">
             Bars are drawn at the size each step resolves to at this width.
           </p>
+
+          <ToolStatus :text="statusText" />
         </div>
       </div>
     </section>

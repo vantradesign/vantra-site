@@ -54,6 +54,21 @@ function swap() {
   foreground.value = background.value
   background.value = previous
 }
+
+/**
+ * [A11y] The spoken version of this tool's answer.
+ *
+ * "4.62 to 1" rather than "4.62:1" because a colon is read inconsistently, and the
+ * verdicts are included because the ratio alone does not tell anyone whether they
+ * may ship the colour — which is the entire question.
+ */
+const statusText = computed(() => {
+  const verdictText = verdicts.value
+    .map((verdict) => `${verdict.label}: ${verdict.passes ? 'pass' : 'fail'}`)
+    .join('. ')
+
+  return `Contrast ${ratio.value.toFixed(2)} to 1. ${verdictText}.`
+})
 </script>
 
 <template>
@@ -125,7 +140,9 @@ function swap() {
 
           <div class="mt-10 border-t border-ink pt-6">
             <p class="caption">Contrast ratio</p>
-            <p class="mt-3 font-display text-cover leading-none tabular-nums" aria-live="polite">
+            <!-- Not a live region: the ratio on its own announces as a bare
+                 number. ToolStatus below speaks it with its verdicts. -->
+            <p class="mt-3 font-display text-cover leading-none tabular-nums">
               {{ formatRatio(ratio) }}
             </p>
             <p class="caption mt-4 normal-case tracking-normal text-ink-muted">
@@ -142,6 +159,8 @@ function swap() {
               :detail="`${verdict.threshold}:1 — ${verdict.requirement}`"
             />
           </div>
+
+          <ToolStatus :text="statusText" />
 
           <div class="mt-12">
             <CodeBlock

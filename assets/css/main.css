@@ -79,9 +79,32 @@
     color: var(--color-ink);
   }
 
+  /* [A11y] Two-tone focus ring, and it has to be two-tone.
+     --color-blue is 11.61:1 against --color-paper but only 1.44:1 against
+     --color-ink, so a single blue outline fails WCAG 2.2 SC 1.4.11 (3:1 for
+     non-text) on every dark surface we actually put controls on: the active chip
+     in ToolChipRail, the active segment in ToolToggle, CopyButton's solid
+     variant, ToastHost's neutral toast, and anything focusable over a
+     photograph in FullBleedHero.
+     The paper-coloured box-shadow sits outside the outline, so one of the two
+     rings always contrasts with whatever is behind it — including an image,
+     where no fixed colour could be guaranteed. Keeping blue as the primary ring
+     means the brand token is unchanged.
+     Do not collapse this to a single outline without re-measuring against ink. */
   :focus-visible {
     outline: 2px solid var(--color-blue);
     outline-offset: 3px;
+    box-shadow: 0 0 0 5px var(--color-paper);
+  }
+
+  /* Fallback for browsers without :focus-visible, where :focus is the only hook
+     available. Plain outline, because there it would also fire on mouse clicks
+     and the halo would be noise. */
+  @supports not (selector(:focus-visible)) {
+    :focus {
+      outline: 2px solid var(--color-blue);
+      outline-offset: 3px;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

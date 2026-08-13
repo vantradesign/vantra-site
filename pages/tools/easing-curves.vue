@@ -28,6 +28,19 @@ const preset = computed({
 
 const timingFunction = computed(() => formatCubicBezier(points.value))
 
+/**
+ * [A11y] The timing function used to sit in its own `aria-live`, which announced
+ * a bare `cubic-bezier(...)` string — four numbers with no indication of what had
+ * changed. Dragging a handle fired one announcement per step.
+ *
+ * Naming the preset first gives the listener the useful part: whether they are
+ * still on a known curve or have moved off it. ToolStatus debounces the rest.
+ */
+const statusText = computed(() => {
+  const name = matchPreset(points.value)?.label ?? 'Custom curve'
+  return `${name}. ${timingFunction.value}.`
+})
+
 /* Geometry. x maps 0–1 onto 0–100; y is inverted and allowed to overshoot
    between -0.5 and 1.5, which is where the interesting curves live. */
 const X_MIN = 0
@@ -266,9 +279,11 @@ const css = computed(() =>
 
         <div class="mt-16 md:col-span-4 md:col-start-9 md:mt-0">
           <p class="caption">Value</p>
-          <p class="mt-3 font-display text-title tabular-nums" aria-live="polite">
+          <p class="mt-3 font-display text-title tabular-nums">
             {{ timingFunction }}
           </p>
+
+          <ToolStatus :text="statusText" />
 
           <div class="mt-10 space-y-6">
             <ToolField

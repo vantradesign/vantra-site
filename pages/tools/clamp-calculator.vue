@@ -67,6 +67,30 @@ const css = computed(() =>
     : `padding-block: ${result.value.css};`,
 )
 
+/**
+ * [A11y] One live region, two kinds of change.
+ *
+ * Previously the explanation and the clamp expression each had their own
+ * `aria-live`. Both recompute from the same inputs, so a single edit queued two
+ * announcements that interrupted each other, and the expression announced as a
+ * bare string with nothing naming it. Dragging the simulator made it worse: one
+ * announcement per step.
+ *
+ * ToolStatus debounces, so a drag reports where it landed. Moving the simulator
+ * is a question about behaviour at a width, so it speaks the explanation;
+ * changing the clamp itself speaks the new value first, because that is the
+ * thing being copied out.
+ */
+const statusText = ref('')
+
+watch(simulated, () => {
+  statusText.value = explanation.value
+})
+
+watch([input, mode], () => {
+  statusText.value = `${css.value} ${explanation.value}`
+})
+
 /* Simulator bounds are fixed at 320–1440 by the brief; the inputs can go
    outside that range, which is why the readout reports the lock state. */
 </script>
@@ -137,9 +161,13 @@ const css = computed(() =>
         />
       </div>
 
-      <p class="mt-8 measure text-lead text-ink-muted" aria-live="polite">
+      <!-- Spoken by the single ToolStatus region below, debounced so dragging
+           the simulator does not announce every step. -->
+      <p class="mt-8 measure text-lead text-ink-muted">
         {{ explanation }}
       </p>
+
+      <ToolStatus :text="statusText" />
 
       <div class="mt-14 border-t border-ink pt-14">
         <div v-if="mode === 'typography'">
@@ -173,7 +201,7 @@ const css = computed(() =>
     <section aria-labelledby="clamp-output-heading" class="gutter mt-section">
       <h2 id="clamp-output-heading" class="caption">Copy-ready value</h2>
 
-      <p class="mt-6 font-display text-title tabular-nums break-words" aria-live="polite">
+      <p class="mt-6 font-display text-title tabular-nums break-words">
         {{ result.css }}
       </p>
 
