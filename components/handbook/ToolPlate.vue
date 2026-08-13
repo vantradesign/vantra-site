@@ -2,7 +2,7 @@
 import { tools } from '~/data/tools'
 
 /**
- * Chapter three's visual: the ten utilities set as one typographic plate,
+ * Chapter three's visual: the eleven utilities set as one typographic plate,
  * grouped by discipline. Names and links only — the index at /tools carries the
  * summaries, and repeating them here would make this page a second index.
  */

@@ -8,7 +8,7 @@ import { tools } from '~/data/tools'
  *
  * The tiles are drawings, not screenshots (see ToolSpecimen), and they are
  * aria-hidden. Each card is one link with the tool's name inside it, so the
- * whole grid reads as a plain list of ten links to a screen reader.
+ * whole grid reads as a plain list of eleven links to a screen reader.
  */
 const root = ref<HTMLElement | null>(null)
 useScrollReveal(root)
@@ -26,7 +26,7 @@ function accentFor(i: number): 'blue' | 'cyan' {
         <div class="md:col-span-7">
           <h2 id="shelf-heading" class="caption">Tools</h2>
           <p class="mt-6 font-display text-display text-balance measure-tight">
-            Ten small instruments, off the shelf.
+            Eleven small instruments, off the shelf.
           </p>
         </div>
 
@@ -65,7 +65,7 @@ function accentFor(i: number): 'blue' | 'cyan' {
       </ul>
 
       <p class="mt-12">
-        <AppLink to="/tools" accent="blue">All ten tools</AppLink>
+        <AppLink to="/tools" accent="blue">All eleven tools</AppLink>
       </p>
     </div>
   </section>

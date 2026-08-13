@@ -35,7 +35,7 @@ useScrollReveal(root)
     <section class="gutter pt-16 md:pt-24">
       <p class="caption">Tools</p>
       <h1 class="mt-8 font-display text-cover max-w-[24ch] text-balance">
-        Ten small instruments for the decisions you make every day.
+        Eleven small instruments for the decisions you make every day.
       </h1>
 
       <div class="mt-12 md:grid md:grid-cols-12 md:gap-x-8">

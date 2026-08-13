@@ -13,6 +13,7 @@ export type ToolSpecimen =
   | 'numerals'
   | 'card'
   | 'fluid'
+  | 'regions'
 
 export interface ToolEntry {
   slug: string
@@ -106,6 +107,15 @@ export const tools: ToolEntry[] = [
     summary: 'One fluid value for a one-off size, with a viewport simulator to prove it.',
     discipline: 'Units',
     specimen: 'fluid',
+  },
+  {
+    slug: 'layout-builder',
+    index: '11',
+    name: 'Grid & Flex Builder',
+    summary:
+      'A visual grid and flex builder with subgrid, emitting plain CSS or Tailwind v4 classes.',
+    discipline: 'Layout',
+    specimen: 'regions',
   },
 ]
 

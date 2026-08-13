@@ -30,7 +30,7 @@ const next = computed(() =>
       <div class="md:col-span-3 md:col-start-10 md:text-right">
         <p class="caption">Index</p>
         <p class="mt-3">
-          <AppLink to="/tools" accent="blue">All ten tools</AppLink>
+          <AppLink to="/tools" accent="blue">All eleven tools</AppLink>
         </p>
       </div>
     </div>

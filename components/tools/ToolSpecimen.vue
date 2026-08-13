@@ -162,6 +162,23 @@ const stackSteps = [4, 6, 9, 13, 19, 27]
       />
     </g>
 
+    <!-- Layout: named regions, one of them spanning two rows. -->
+    <g v-else-if="props.specimen === 'regions'">
+      <rect x="10" y="20" width="80" height="14" class="fill-ink" opacity="0.22" />
+      <rect x="10" y="38" width="24" height="42" class="fill-ink" opacity="0.35" />
+      <rect
+        x="38"
+        y="38"
+        width="52"
+        height="42"
+        fill="none"
+        :style="{ stroke: accentColor }"
+        stroke-width="2"
+      />
+      <line x1="38" y1="60" x2="90" y2="60" class="stroke-ink" stroke-width="1" opacity="0.3" />
+      <line x1="64" y1="38" x2="64" y2="80" class="stroke-ink" stroke-width="1" opacity="0.3" />
+    </g>
+
     <!-- Units: one value, sloping between two viewports. -->
     <g v-else-if="props.specimen === 'fluid'">
       <line x1="12" y1="24" x2="12" y2="86" class="stroke-ink" stroke-width="1" opacity="0.3" />
