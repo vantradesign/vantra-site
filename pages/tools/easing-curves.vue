@@ -3,7 +3,8 @@ import { EASING_PRESETS, formatCubicBezier, matchPreset } from '~/utils/tools/ea
 import type { BezierPoints } from '~/utils/tools/easing'
 import type { Chip } from '~/types/tools'
 
-useSeoMeta({
+useToolPageSeo({
+  slug: 'easing-curves',
   title: 'Easing Curve Visualizer',
   description:
     'A cubic-bezier editor with draggable and keyboard-movable control points, presets, and a repeatable live preview.',
@@ -335,6 +336,8 @@ const css = computed(() =>
       <h2 id="easing-output-heading" class="sr-only">Copy-ready output</h2>
       <CodeBlock :code="css" label="Copy-ready CSS" copy-label="Copy CSS" />
     </section>
+
+    <ToolReference slug="easing-curves" />
 
     <ToolFooterNav slug="easing-curves" />
   </div>

@@ -22,6 +22,7 @@ pnpm dev                 # http://localhost:3000
 | `pnpm generate` | Prerender the whole site to `.output/public`. This is the production build today. |
 | `pnpm preview` | Serve the built output. |
 | `pnpm tsc` | `vue-tsc --noEmit`. Use this, not `npx tsc`. |
+| `pnpm run verify:seo` | Validate canonicals, Open Graph and JSON-LD in the built output. Run after `pnpm generate`. |
 
 ---
 
@@ -143,6 +144,48 @@ poster frame with native controls, so the visitor can still choose to play it.
 3. Record the real captures; register them in `public/media/MANIFEST.md`.
 4. Done. `/work/[slug]` and both indexes pick it up — no new components, and
    `crawlLinks` prerenders the route automatically.
+
+---
+
+## SEO, structured data and the reference layer
+
+Full detail in [`docs/seo/`](./docs/seo/). The short version, because two of these
+are easy to break by accident:
+
+**Every page calls `usePageSeo()`, not `useSeoMeta()`.** That one call emits the
+title, description, canonical, Open Graph and Twitter tags, and a single JSON-LD
+`@graph` containing `Organization`, `WebSite` and a page node. A page that calls
+`useSeoMeta()` directly silently loses its canonical and all of its structured
+data. Tool pages call `useToolPageSeo()`, which wraps it and adds the breadcrumb
+and the `WebApplication` node.
+
+**`robots.txt`, `sitemap.xml` and `llms.txt` are generated, not static files.**
+They live in `server/routes/` and are built from `data/routes.ts`, so a new tool or
+product appears in all three automatically. Because nothing links to them,
+`crawlLinks` cannot find them and they are listed explicitly in
+`nitro.prerender.routes` — remove them from there and they stop being emitted.
+
+**The reference layer is the factual register below each tool.** Cover lines and
+standfirsts stay editorial; the explanatory content that answers "what is the
+clamp formula" lives in `data/tool-reference.ts` and renders through
+`ToolReference.vue`. The two registers are deliberately separate — see
+[`docs/seo/reference-layer-pattern.md`](./docs/seo/reference-layer-pattern.md)
+before adding to either.
+
+**Schema must mirror visible content.** No `aggregateRating`, no invented
+credentials, no `SoftwareApplication` on a product whose status is `planned`.
+`utils/schema.ts` documents why for each. This is a spam-policy constraint, not a
+stylistic preference.
+
+Verify with:
+
+```bash
+pnpm run generate && pnpm run verify:seo
+```
+
+`scripts/verify-seo.mjs` checks the emitted HTML — canonical correctness, JSON-LD
+validity and required fields, breadcrumb sequence, sitemap/`noindex` consistency —
+and exits non-zero on failure.
 
 ---
 

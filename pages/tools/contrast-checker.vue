@@ -3,7 +3,8 @@ import { contrastRatio, formatRatio, wcagVerdicts } from '~/utils/tools/color'
 import { COLOR_TOKENS, tokenByHex } from '~/utils/tools/tokens'
 import type { Chip } from '~/types/tools'
 
-useSeoMeta({
+useToolPageSeo({
+  slug: 'contrast-checker',
   title: 'Contrast Checker',
   description:
     'Check WCAG contrast between two colours, with the Vantra palette available as presets. Runs entirely in the browser.',
@@ -153,6 +154,8 @@ function swap() {
         </div>
       </div>
     </section>
+
+    <ToolReference slug="contrast-checker" />
 
     <ToolFooterNav slug="contrast-checker" />
   </div>

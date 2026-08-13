@@ -1,10 +1,24 @@
 <script setup lang="ts">
 import { products } from '~/data/products'
+import { itemListNode } from '~/utils/schema'
+import { absoluteUrl } from '~/utils/site'
 
-useSeoMeta({
+usePageSeo({
   title: 'Work',
   description:
     'Vantra’s products: an accessibility auto-fixer, a design reviewer, a deprecation lifecycle orchestrator, and a design system maturity check.',
+  pageType: 'CollectionPage',
+  breadcrumb: [{ name: 'Work', path: '/work' }],
+  schema: [
+    itemListNode(
+      absoluteUrl('/work'),
+      products.map((product) => ({
+        name: product.name,
+        path: `/work/${product.slug}`,
+        description: product.summary,
+      })),
+    ),
+  ],
 })
 </script>
 

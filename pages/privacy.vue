@@ -1,7 +1,8 @@
 <script setup lang="ts">
-useSeoMeta({
+usePageSeo({
   title: 'Privacy',
   description: 'What this website collects, and what Vantra’s tools collect.',
+  breadcrumb: [{ name: 'Privacy', path: '/privacy' }],
 })
 </script>
 

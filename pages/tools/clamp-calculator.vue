@@ -2,7 +2,8 @@
 import { clampAtViewport, computeClamp, formatUnit } from '~/utils/tools/scale'
 import type { ToggleOption } from '~/types/tools'
 
-useSeoMeta({
+useToolPageSeo({
+  slug: 'clamp-calculator',
   title: 'CSS clamp() Calculator',
   description:
     'Calculate a single fluid CSS clamp() value for a one-off size, with a viewport simulator that shows exactly how the interpolation behaves.',
@@ -187,6 +188,8 @@ const css = computed(() =>
         <AppLink to="/tools/spacing-scale" accent="blue">fluid spacing scale</AppLink>.
       </p>
     </section>
+
+    <ToolReference slug="clamp-calculator" />
 
     <ToolFooterNav slug="clamp-calculator" />
   </div>

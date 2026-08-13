@@ -1,7 +1,20 @@
 <script setup lang="ts">
-useSeoMeta({
+/**
+ * `noindex` until the journal has entries.
+ *
+ * Today this page's entire content is a promise that it will have content later.
+ * Indexed, it is thin content, and thin content is weighed against the whole site
+ * rather than just the URL it sits on. `follow` is kept so the GitHub link still
+ * passes, and the page stays reachable from the header for anyone who clicks it.
+ *
+ * Remove this flag and the `/journal` entry in `EXCLUDED_FROM_SITEMAP`
+ * (`data/routes.ts`) in the same commit as the first published entry.
+ */
+usePageSeo({
   title: 'Journal',
   description: 'Build notes from the making of Vantra’s tools.',
+  breadcrumb: [{ name: 'Journal', path: '/journal' }],
+  noindex: true,
 })
 </script>
 

@@ -1,9 +1,20 @@
 <script setup lang="ts">
+import { personNode } from '~/utils/schema'
 import type { MoodImage } from '~/types/product'
 
-useSeoMeta({
+/**
+ * `AboutPage` plus the `Person` node. This URL is the `@id` target for that
+ * person everywhere else in the graph, so the node belongs here as well as on the
+ * home page — an engine resolving the reference should land on a page that is
+ * about them.
+ */
+usePageSeo({
   title: 'About',
-  description: 'What Vantra is, and the principles the tools are built on.',
+  description:
+    'What Vantra is, and the principles the tools are built on: local-first, open by default, and a finding is worth nothing without the fix beside it.',
+  pageType: 'AboutPage',
+  breadcrumb: [{ name: 'About', path: '/about' }],
+  schema: [personNode()],
 })
 
 const studio: MoodImage = {

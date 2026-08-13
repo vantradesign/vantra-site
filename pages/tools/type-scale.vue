@@ -8,7 +8,8 @@ import {
 } from '~/utils/tools/scale'
 import type { Chip, ToggleOption } from '~/types/tools'
 
-useSeoMeta({
+useToolPageSeo({
+  slug: 'type-scale',
   title: 'Modular Type Scale',
   description:
     'Generate a fluid or static typographic scale from a base size and a ratio, previewed as a specimen page, with copy-ready CSS custom properties.',
@@ -307,6 +308,8 @@ const allCss = computed(() => {
         <AppLink to="/tools/clamp-calculator" accent="blue">clamp() calculator</AppLink>.
       </p>
     </section>
+
+    <ToolReference slug="type-scale" />
 
     <ToolFooterNav slug="type-scale" />
   </div>

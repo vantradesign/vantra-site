@@ -3,7 +3,8 @@ import { bestTextOn, formatRatio, generateRamp } from '~/utils/tools/color'
 import { BRAND_PRIMARY, COLOR_TOKENS } from '~/utils/tools/tokens'
 import type { Chip } from '~/types/tools'
 
-useSeoMeta({
+useToolPageSeo({
+  slug: 'shade-tint-generator',
   title: 'Shade & Tint Generator',
   description:
     'Generate a ten-step colour ramp from one hex value, with contrast checked against white and black at every step, and a Tailwind config export.',
@@ -152,6 +153,8 @@ const cssVariables = computed(() =>
       <h2 id="ramp-output-heading" class="sr-only">Copy-ready output</h2>
       <CodeBlock :code="tailwindConfig" label="Tailwind config" copy-label="Copy config" />
     </section>
+
+    <ToolReference slug="shade-tint-generator" />
 
     <ToolFooterNav slug="shade-tint-generator" />
   </div>

@@ -1,10 +1,29 @@
 <script setup lang="ts">
 import { tools } from '~/data/tools'
+import { itemListNode } from '~/utils/schema'
+import { absoluteUrl } from '~/utils/site'
 
-useSeoMeta({
+/**
+ * `CollectionPage` plus an `ItemList`, because that is what this page is. The
+ * list mirrors the visible rail below, in the same order, so the markup and the
+ * rendered index cannot disagree about what the set contains.
+ */
+usePageSeo({
   title: 'Tools',
   description:
-    'Ten small, local-first utilities for colour, type, layout and motion. No account, no upload, nothing leaves the browser.',
+    'Eleven free browser tools: WCAG contrast, type and spacing scales, CSS clamp(), grid and flex, easing curves, unit conversion. Nothing leaves the browser.',
+  pageType: 'CollectionPage',
+  breadcrumb: [{ name: 'Tools', path: '/tools' }],
+  schema: [
+    itemListNode(
+      absoluteUrl('/tools'),
+      tools.map((tool) => ({
+        name: tool.name,
+        path: `/tools/${tool.slug}`,
+        description: tool.summary,
+      })),
+    ),
+  ],
 })
 
 const root = ref<HTMLElement | null>(null)

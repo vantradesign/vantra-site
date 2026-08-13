@@ -2,7 +2,8 @@
 import { formatUnit, fromPx, toPx } from '~/utils/tools/scale'
 import type { Unit } from '~/utils/tools/scale'
 
-useSeoMeta({
+useToolPageSeo({
+  slug: 'unit-converter',
   title: 'Unit Converter',
   description:
     'Convert px, rem, em and pt live against an adjustable root font size. Four synchronised fields, no submit button.',
@@ -131,6 +132,8 @@ const css = computed(() =>
       <h2 id="unit-output-heading" class="sr-only">Copy-ready output</h2>
       <CodeBlock :code="css" label="Copy-ready CSS" copy-label="Copy CSS" />
     </section>
+
+    <ToolReference slug="unit-converter" />
 
     <ToolFooterNav slug="unit-converter" />
   </div>

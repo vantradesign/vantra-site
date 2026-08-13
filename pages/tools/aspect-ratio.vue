@@ -9,7 +9,8 @@ import {
 import type { Chip } from '~/types/tools'
 import type { MoodImage } from '~/types/product'
 
-useSeoMeta({
+useToolPageSeo({
+  slug: 'aspect-ratio',
   title: 'Aspect Ratio Calculator',
   description:
     'Ratio to dimension, dimension to ratio, and proportional resize — with a live preview and a printable reference table.',
@@ -355,6 +356,8 @@ const resizeResult = computed(() => {
         </tbody>
       </table>
     </section>
+
+    <ToolReference slug="aspect-ratio" />
 
     <ToolFooterNav slug="aspect-ratio" />
   </div>

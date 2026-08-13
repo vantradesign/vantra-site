@@ -4,7 +4,8 @@ import { FONT_MOODS, FONT_PAIRINGS, pairingCss } from '~/utils/tools/fonts'
 import type { FontPairing } from '~/utils/tools/fonts'
 import type { Chip } from '~/types/tools'
 
-useSeoMeta({
+useToolPageSeo({
+  slug: 'font-pairing',
   title: 'Font Pairing Studio',
   description:
     'Curated typeface combinations previewed as real editorial spreads, filtered by mood, with copy-ready CSS. Fonts are self-hosted — no third-party requests.',
@@ -103,6 +104,8 @@ function stack(face: FontPairing['heading']) {
         </p>
       </div>
     </section>
+
+    <ToolReference slug="font-pairing" />
 
     <ToolFooterNav slug="font-pairing" />
   </div>

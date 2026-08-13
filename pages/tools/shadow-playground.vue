@@ -3,7 +3,8 @@ import { SHADOW_PRESETS, shadowToCss } from '~/utils/tools/shadow'
 import type { ShadowLayer } from '~/utils/tools/shadow'
 import type { Chip } from '~/types/tools'
 
-useSeoMeta({
+useToolPageSeo({
+  slug: 'shadow-playground',
   title: 'Radius & Shadow Playground',
   description:
     'Build layered box-shadow and border-radius values against a real content card, with keyboard-operable sliders and copy-ready CSS.',
@@ -235,6 +236,8 @@ const css = computed(() =>
         </div>
       </div>
     </section>
+
+    <ToolReference slug="shadow-playground" />
 
     <ToolFooterNav slug="shadow-playground" />
   </div>

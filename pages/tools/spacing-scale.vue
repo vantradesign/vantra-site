@@ -7,7 +7,8 @@ import {
 } from '~/utils/tools/scale'
 import type { ToggleOption } from '~/types/tools'
 
-useSeoMeta({
+useToolPageSeo({
+  slug: 'spacing-scale',
   title: 'Spacing Scale Generator',
   description:
     'Fluid or static spacing tokens on a 4pt or 8pt grid, drawn to proportion, with copy-ready CSS custom properties.',
@@ -247,6 +248,8 @@ const allCss = computed(() => {
         <AppLink to="/tools/clamp-calculator" accent="blue">clamp() calculator</AppLink>.
       </p>
     </section>
+
+    <ToolReference slug="spacing-scale" />
 
     <ToolFooterNav slug="spacing-scale" />
   </div>

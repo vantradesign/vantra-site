@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { findProduct } from '~/data/products'
+import { softwareProductNode } from '~/utils/schema'
+import { absoluteUrl } from '~/utils/site'
 
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
@@ -19,9 +21,44 @@ if (!product.value) {
   throw createError({ statusCode: 404, statusMessage: 'No such work entry', fatal: true })
 }
 
-useSeoMeta({
-  title: () => product.value?.name ?? 'Work',
-  description: () => product.value?.summary ?? '',
+/**
+ * `SoftwareApplication` is emitted only for products that actually exist as
+ * software today.
+ *
+ * A page with `status: 'planned'` is an announcement, not a software listing, and
+ * marking it up as an application would assert a product a visitor cannot obtain
+ * — the visible page says "Planned" while the markup says "here is an
+ * application". That mismatch is a structured-data spam violation, and it is also
+ * how a page earns an "available" treatment it has not earned. So planned entries
+ * carry the `WebPage` node and nothing more, and gain the application node the
+ * moment their status changes in `data/products.ts`.
+ */
+const productSchema = computed(() => {
+  const entry = product.value
+  if (!entry || entry.status === 'planned') return []
+
+  return [
+    softwareProductNode({
+      url: absoluteUrl(`/work/${entry.slug}`),
+      name: entry.name,
+      description: entry.summary,
+      license: entry.license,
+      category: 'DeveloperApplication',
+      // The first link is the canonical source location for every current entry.
+      // Only forwarded when it really is a repository URL.
+      codeRepository: entry.links.find((link) => link.href.includes('github.com'))?.href,
+    }),
+  ]
+})
+
+usePageSeo({
+  title: product.value?.name ?? 'Work',
+  description: product.value?.summary ?? '',
+  breadcrumb: [
+    { name: 'Work', path: '/work' },
+    { name: product.value?.name ?? 'Work', path: `/work/${slug.value}` },
+  ],
+  schema: productSchema.value,
 })
 
 const supportingMedia = computed(() => product.value?.media.slice(1) ?? [])

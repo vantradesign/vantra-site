@@ -2,10 +2,11 @@
 import { chapters } from '~/data/handbook'
 import type { MoodImage } from '~/types/product'
 
-useSeoMeta({
+usePageSeo({
   title: 'How it works',
   description:
     'How Vantra is put together: what @vantra-design/core parses, why every tool builds on it, and how governance, tools and contribution fit around it.',
+  breadcrumb: [{ name: 'How it works', path: '/how-it-works' }],
 })
 
 /** Index-safe lookup: the register, the contents page and these sections share one source. */

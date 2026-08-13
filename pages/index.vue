@@ -1,11 +1,30 @@
 <script setup lang="ts">
 import { products } from '~/data/products'
+import { tools } from '~/data/tools'
+import { personNode, itemListNode } from '~/utils/schema'
+import { absoluteUrl } from '~/utils/site'
 import type { MoodImage } from '~/types/product'
 
-useSeoMeta({
+/**
+ * The home page carries the `Person` node for the operator and an `ItemList` of
+ * the tools. It is the one page where naming the whole set is accurate rather
+ * than padding: an engine that lands here should learn what exists in one pass.
+ */
+usePageSeo({
   title: 'Vantra',
   description:
-    'Vantra builds local-first, open-source tools for accessibility, design systems and product governance.',
+    'Local-first, open-source tools for accessibility and design systems. Eleven free browser tools for contrast, type scales, fluid CSS and layout.',
+  schema: [
+    personNode(),
+    itemListNode(
+      absoluteUrl('/'),
+      tools.map((tool) => ({
+        name: tool.name,
+        path: `/tools/${tool.slug}`,
+        description: tool.summary,
+      })),
+    ),
+  ],
 })
 
 const openingImage: MoodImage = {

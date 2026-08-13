@@ -1,7 +1,15 @@
 <script setup lang="ts">
-useSeoMeta({
+/**
+ * `ContactPage`, because this is the page that carries the operator's identity and
+ * contact details. It is also the visible source for the `address` and `email`
+ * fields in the `Organization` and `Person` nodes — those exist in the markup only
+ * because they are printed here.
+ */
+usePageSeo({
   title: 'Imprint',
   description: 'Legal disclosure for vantra.design.',
+  pageType: 'ContactPage',
+  breadcrumb: [{ name: 'Imprint', path: '/imprint' }],
 })
 </script>
 

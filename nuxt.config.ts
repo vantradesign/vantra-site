@@ -71,6 +71,14 @@ export default defineNuxtConfig({
         '/imprint',
         '/tools',
         ...toolRoutes,
+        // [SEO] The three crawler-facing files are Nitro routes
+        // (server/routes/), not static files in public/, so their contents are
+        // generated from data/ and cannot drift from the real route list. They
+        // are unreachable by `crawlLinks` — nothing on the site links to them —
+        // so they have to be named here or they are simply not emitted.
+        '/robots.txt',
+        '/sitemap.xml',
+        '/llms.txt',
       ],
     },
   },
