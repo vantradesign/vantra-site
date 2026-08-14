@@ -81,10 +81,8 @@ const stackSteps = [4, 6, 9, 13, 19, 27]
 
     <!-- Type: two faces, one baseline. -->
     <g v-else-if="props.specimen === 'pair'" class="fill-ink">
-      <text x="10" y="70" class="font-display" font-size="52" font-weight="700">
-        Aa
-      </text>
-      <text x="62" y="70" class="font-sans" font-size="30">Aa</text>
+      <text x="8" y="68" class="font-display" font-size="30" font-weight="700">Aa</text>
+      <text x="56" y="68" class="font-sans" font-size="20">Aa</text>
       <line
         x1="10"
         y1="76"
