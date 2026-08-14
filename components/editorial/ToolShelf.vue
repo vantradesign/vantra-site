@@ -20,7 +20,7 @@ function accentFor(i: number): 'blue' | 'cyan' {
 </script>
 
 <template>
-  <section ref="root" aria-labelledby="shelf-heading" class="mt-section">
+  <section ref="root" aria-labelledby="shelf-heading" class="mt-section border-t border-rule pt-8 md:pt-10">
     <div class="gutter">
       <div class="md:grid md:grid-cols-12 md:items-end md:gap-x-8">
         <div class="md:col-span-7">

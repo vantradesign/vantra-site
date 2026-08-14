@@ -19,7 +19,7 @@ useScrollReveal(root)
 </script>
 
 <template>
-  <section ref="root" class="gutter mt-section">
+  <section ref="root" class="gutter mt-section border-t border-rule pt-8 md:pt-10">
     <div class="md:grid md:grid-cols-12 md:gap-x-8 md:items-start">
       <div
         class="order-2 md:order-none"

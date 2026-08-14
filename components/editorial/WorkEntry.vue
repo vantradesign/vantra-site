@@ -29,7 +29,7 @@ const accentClass = computed(() => (props.product.accent === 'cyan' ? 'cyan' : '
 </script>
 
 <template>
-  <article ref="root" class="mt-section">
+  <article ref="root" class="mt-section border-t border-rule pt-8 md:pt-10">
     <div class="gutter">
       <div class="md:grid md:grid-cols-12 md:gap-x-8">
         <div

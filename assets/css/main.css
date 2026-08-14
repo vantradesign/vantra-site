@@ -6,6 +6,7 @@
    govern its own marketing site with its own tooling. */
 @theme {
   --color-paper: #f5f2f3;
+  --color-surface: #e2dfe0;
   --color-ink: #001619;
   --color-blue: #021f94;
   --color-cyan: #50e8f4;

@@ -60,21 +60,40 @@ const principles = [
 
     <ManifestoBlock kicker="What this is" :statements="manifesto" />
 
-    <section aria-labelledby="work-heading">
-      <h2 id="work-heading" class="gutter caption mt-section">Work</h2>
-      <WorkEntry
-        v-for="(product, i) in products"
-        :key="product.slug"
-        :product="product"
-        :align="i % 2 === 0 ? 'left' : 'right'"
-      />
+    <section aria-labelledby="work-heading" class="mt-section border-t border-rule bg-surface pb-16 md:pb-20">
+      <h2 id="work-heading" class="gutter caption pt-8 md:pt-10">Work</h2>
+
+      <div class="gutter mt-10 grid gap-10 sm:gap-8 md:grid-cols-[1fr_1.6fr_1fr] md:gap-6">
+        <!-- Featured center card — first in DOM for mobile, placed center on desktop -->
+        <WorkGridCard
+          :product="products[0]"
+          featured
+          class="md:col-start-2 md:row-start-1 md:row-span-2"
+        />
+        <WorkGridCard
+          :product="products[1]"
+          class="md:col-start-1 md:row-start-1 md:self-start"
+        />
+        <WorkGridCard
+          :product="products[2]"
+          class="md:col-start-3 md:row-start-1 md:self-start"
+        />
+        <WorkGridCard
+          :product="products[3]"
+          class="md:col-start-1 md:row-start-2 md:self-start"
+        />
+        <WorkGridCard
+          :product="products[4]"
+          class="md:col-start-3 md:row-start-2 md:self-start"
+        />
+      </div>
     </section>
 
     <ToolShelf />
 
     <PullQuote kicker="Principles" :principles="principles" />
 
-    <section class="gutter mt-section">
+    <section class="gutter mt-section border-t border-rule pt-8 md:pt-10">
       <div class="md:grid md:grid-cols-12">
         <div class="md:col-span-8 md:col-start-5">
           <p class="font-display text-display text-balance measure-tight">

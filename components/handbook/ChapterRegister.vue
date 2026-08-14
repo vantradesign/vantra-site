@@ -39,7 +39,7 @@ onMounted(() => {
        as a running head on a magazine spread. -->
   <nav
     aria-label="Chapters"
-    class="fixed inset-x-0 top-0 z-40 border-b border-rule bg-paper/92 backdrop-blur-sm transition-[opacity,transform] duration-500 ease-editorial"
+    class="fixed inset-x-0 top-[3.5625rem] z-30 border-b border-rule bg-paper/92 backdrop-blur-sm transition-[opacity,transform] duration-500 ease-editorial"
     :class="revealed ? 'opacity-100 translate-y-0' : 'pointer-events-none -translate-y-full opacity-0'"
     :aria-hidden="!revealed"
     :inert="!revealed"

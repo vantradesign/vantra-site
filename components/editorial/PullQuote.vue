@@ -9,7 +9,7 @@ useScrollReveal(root)
 </script>
 
 <template>
-  <section ref="root" class="mt-section bg-cyan-soft/45 py-20 md:py-28">
+  <section ref="root" class="mt-section border-t border-rule bg-surface py-20 md:py-28">
     <div class="gutter">
       <h2 v-if="kicker" class="caption mb-12">{{ kicker }}</h2>
 
