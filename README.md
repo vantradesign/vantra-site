@@ -4,7 +4,7 @@ The Vantra product site. Editorial in tone, static in delivery, structured so
 that accounts and payments can be added later without a rewrite.
 
 Nuxt 3 · TypeScript · Tailwind CSS v4 · `@nuxt/image` · `@nuxt/fonts` ·
-`@nuxtjs/supabase` (dormant)
+Vitest
 
 ---
 
@@ -12,16 +12,22 @@ Nuxt 3 · TypeScript · Tailwind CSS v4 · `@nuxt/image` · `@nuxt/fonts` ·
 
 ```bash
 pnpm install
-cp .env.example .env     # placeholder Supabase values are fine
 pnpm dev                 # http://localhost:3000
 ```
+
+No `.env` is required. The `.env.example` documents the shape of future
+integrations (Supabase, Stripe) but nothing reads those values today.
 
 | Script | Purpose |
 | --- | --- |
 | `pnpm dev` | Dev server. |
-| `pnpm generate` | Prerender the whole site to `.output/public`. This is the production build today. |
+| `pnpm generate` | Prerender the whole site to `.output/public` and inject CSP hashes. This is the production build. |
+| `pnpm generate:nocsp` | `nuxt generate` only, without the CSP hash injection step. |
 | `pnpm preview` | Serve the built output. |
 | `pnpm tsc` | `vue-tsc --noEmit`. Use this, not `npx tsc`. |
+| `pnpm test` | Run the Vitest suite (pure-function and component tiers). |
+| `pnpm test:watch` | Vitest in watch mode. |
+| `pnpm run typecheck` | `nuxt typecheck`. |
 | `pnpm run verify:seo` | Validate canonicals, Open Graph and JSON-LD in the built output. Run after `pnpm generate`. |
 
 ---
@@ -189,6 +195,21 @@ and exits non-zero on failure.
 
 ---
 
+## Testing
+
+Vitest, configured in `vitest.config.ts`, with two tiers:
+
+- **`utils/`** — pure functions, run in plain Node. Layout arithmetic, drag state
+  machine, token parser, contrast batch logic. This is where most coverage lives.
+- **`components/`** — mounted in jsdom, covering the wiring between DOM events
+  and emits that no pure test can enforce.
+
+```bash
+pnpm test
+```
+
+---
+
 ## Rendering, now and later
 
 `ssr: true` is already set. The production build simply runs `nuxt generate`,
@@ -257,10 +278,13 @@ deployments per pull request.
 - Build command: `pnpm generate`
 - Output directory: `.output/public`
 - Environment variables: none required.
-- Security headers: `public/_headers` is copied verbatim into the output root and
-  read by Cloudflare Pages. It sets the CSP, HSTS and `Referrer-Policy`. Verify
-  it against the deployed response after any change to scripts or fonts — the
-  file is not validated at build time.
+- Security headers: `public/_headers` sets the CSP, HSTS and `Referrer-Policy`.
+  `pnpm generate` runs `scripts/inject-csp-hashes.mjs` after prerendering, which
+  computes SHA-256 hashes for Nuxt's inline `<script>` tags (they embed a
+  per-build `buildId`) and rewrites the CSP `script-src` in `.output/public/_headers`.
+  Without the hashes the inline scripts are blocked under `script-src 'self'` and
+  the app boots without its runtime config. Verify the deployed response after any
+  change to scripts or fonts.
 
 ### Performance budget
 
