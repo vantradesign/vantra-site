@@ -6,6 +6,12 @@ export interface FontFace {
   family: string
   weight: number
   fallback: string
+  /** Whether a variable-font file exists for this family (wght axis). */
+  variable?: boolean
+  /** Full weight range of the variable font, e.g. [100, 900]. */
+  weightRange?: [number, number]
+  /** Whether the family ships an italic variant. */
+  hasItalic?: boolean
 }
 
 export interface FontPairing {
@@ -26,8 +32,8 @@ export const FONT_PAIRINGS: FontPairing[] = [
   {
     id: 'fraunces-inter',
     mood: 'Editorial',
-    heading: { family: 'Fraunces', weight: 700, fallback: SERIF_FALLBACK },
-    body: { family: 'Inter', weight: 400, fallback: SANS_FALLBACK },
+    heading: { family: 'Fraunces', weight: 700, fallback: SERIF_FALLBACK, variable: true, weightRange: [100, 900], hasItalic: true },
+    body: { family: 'Inter', weight: 400, fallback: SANS_FALLBACK, variable: true, weightRange: [100, 900], hasItalic: true },
     note: 'A display serif with optical sizing against a neutral grotesque. The default answer for long-form.',
     sampleHeading: 'Design systems fail slowly, and always in the same places.',
     sampleBody:
@@ -36,8 +42,8 @@ export const FONT_PAIRINGS: FontPairing[] = [
   {
     id: 'playfair-source-sans',
     mood: 'Editorial',
-    heading: { family: 'Playfair Display', weight: 700, fallback: SERIF_FALLBACK },
-    body: { family: 'Source Sans 3', weight: 400, fallback: SANS_FALLBACK },
+    heading: { family: 'Playfair Display', weight: 700, fallback: SERIF_FALLBACK, variable: true, weightRange: [400, 900], hasItalic: true },
+    body: { family: 'Source Sans 3', weight: 400, fallback: SANS_FALLBACK, variable: true, weightRange: [200, 900], hasItalic: true },
     note: 'High-contrast didone headline over a humanist sans. Reads as fashion print at large sizes.',
     sampleHeading: 'Built for the quiet parts of the interface.',
     sampleBody:
@@ -46,8 +52,8 @@ export const FONT_PAIRINGS: FontPairing[] = [
   {
     id: 'bricolage-inclusive',
     mood: 'Editorial',
-    heading: { family: 'Bricolage Grotesque', weight: 700, fallback: SANS_FALLBACK },
-    body: { family: 'Inclusive Sans', weight: 400, fallback: SANS_FALLBACK },
+    heading: { family: 'Bricolage Grotesque', weight: 700, fallback: SANS_FALLBACK, variable: true, weightRange: [200, 800] },
+    body: { family: 'Inclusive Sans', weight: 400, fallback: SANS_FALLBACK, hasItalic: true },
     note: 'The pairing this site runs on: an idiosyncratic display grotesque with a legibility-first body sans.',
     sampleHeading: 'Removing something is also a design decision.',
     sampleBody:
@@ -56,8 +62,8 @@ export const FONT_PAIRINGS: FontPairing[] = [
   {
     id: 'ibm-plex-duo',
     mood: 'Technical',
-    heading: { family: 'IBM Plex Sans', weight: 700, fallback: SANS_FALLBACK },
-    body: { family: 'IBM Plex Mono', weight: 400, fallback: MONO_FALLBACK },
+    heading: { family: 'IBM Plex Sans', weight: 700, fallback: SANS_FALLBACK, hasItalic: true },
+    body: { family: 'IBM Plex Mono', weight: 400, fallback: MONO_FALLBACK, hasItalic: true },
     note: 'One family, two voices. Mono body keeps code, values and prose on the same rhythm.',
     sampleHeading: 'Four buttons, all named Button.',
     sampleBody:
@@ -66,8 +72,8 @@ export const FONT_PAIRINGS: FontPairing[] = [
   {
     id: 'space-grotesk-inter',
     mood: 'Technical',
-    heading: { family: 'Space Grotesk', weight: 700, fallback: SANS_FALLBACK },
-    body: { family: 'Inter', weight: 400, fallback: SANS_FALLBACK },
+    heading: { family: 'Space Grotesk', weight: 700, fallback: SANS_FALLBACK, variable: true, weightRange: [300, 700] },
+    body: { family: 'Inter', weight: 400, fallback: SANS_FALLBACK, variable: true, weightRange: [100, 900], hasItalic: true },
     note: 'Geometric display with tight tracking against a workhorse UI sans. Product-documentation default.',
     sampleHeading: 'Local first, always.',
     sampleBody:
@@ -76,8 +82,8 @@ export const FONT_PAIRINGS: FontPairing[] = [
   {
     id: 'jetbrains-source-sans',
     mood: 'Technical',
-    heading: { family: 'JetBrains Mono', weight: 700, fallback: MONO_FALLBACK },
-    body: { family: 'Source Sans 3', weight: 400, fallback: SANS_FALLBACK },
+    heading: { family: 'JetBrains Mono', weight: 700, fallback: MONO_FALLBACK, variable: true, weightRange: [100, 800], hasItalic: true },
+    body: { family: 'Source Sans 3', weight: 400, fallback: SANS_FALLBACK, variable: true, weightRange: [200, 900], hasItalic: true },
     note: 'Mono headline, sans body. Signals engineering surface without making paragraphs hard work.',
     sampleHeading: 'contrast(ink, paper) = 15.94:1',
     sampleBody:
@@ -86,8 +92,8 @@ export const FONT_PAIRINGS: FontPairing[] = [
   {
     id: 'libre-franklin-lora',
     mood: 'Governance-Report',
-    heading: { family: 'Libre Franklin', weight: 700, fallback: SANS_FALLBACK },
-    body: { family: 'Lora', weight: 400, fallback: SERIF_FALLBACK },
+    heading: { family: 'Libre Franklin', weight: 700, fallback: SANS_FALLBACK, variable: true, weightRange: [100, 900], hasItalic: true },
+    body: { family: 'Lora', weight: 400, fallback: SERIF_FALLBACK, variable: true, weightRange: [400, 700], hasItalic: true },
     note: 'Civic-grotesque headline over a text serif. Made for documents people are asked to sign off.',
     sampleHeading: 'Quarterly design system health report',
     sampleBody:
@@ -96,8 +102,8 @@ export const FONT_PAIRINGS: FontPairing[] = [
   {
     id: 'archivo-newsreader',
     mood: 'Governance-Report',
-    heading: { family: 'Archivo', weight: 700, fallback: SANS_FALLBACK },
-    body: { family: 'Newsreader', weight: 400, fallback: SERIF_FALLBACK },
+    heading: { family: 'Archivo', weight: 700, fallback: SANS_FALLBACK, variable: true, weightRange: [100, 900], hasItalic: true },
+    body: { family: 'Newsreader', weight: 400, fallback: SERIF_FALLBACK, variable: true, weightRange: [200, 800], hasItalic: true },
     note: 'Condensable grotesque with a screen-first serif. Dense tables stay readable underneath.',
     sampleHeading: 'Breaking changes, by blast radius',
     sampleBody:
@@ -106,8 +112,8 @@ export const FONT_PAIRINGS: FontPairing[] = [
   {
     id: 'work-sans-crimson',
     mood: 'Governance-Report',
-    heading: { family: 'Work Sans', weight: 700, fallback: SANS_FALLBACK },
-    body: { family: 'Crimson Pro', weight: 400, fallback: SERIF_FALLBACK },
+    heading: { family: 'Work Sans', weight: 700, fallback: SANS_FALLBACK, variable: true, weightRange: [100, 900], hasItalic: true },
+    body: { family: 'Crimson Pro', weight: 400, fallback: SERIF_FALLBACK, variable: true, weightRange: [200, 900], hasItalic: true },
     note: 'Quiet, institutional, low-drama. Good for policy pages nobody should have to decode.',
     sampleHeading: 'Deprecation policy, version 3',
     sampleBody:
@@ -116,8 +122,8 @@ export const FONT_PAIRINGS: FontPairing[] = [
   {
     id: 'outfit-nunito',
     mood: 'Playful',
-    heading: { family: 'Outfit', weight: 700, fallback: SANS_FALLBACK },
-    body: { family: 'Nunito Sans', weight: 400, fallback: SANS_FALLBACK },
+    heading: { family: 'Outfit', weight: 700, fallback: SANS_FALLBACK, variable: true, weightRange: [100, 900] },
+    body: { family: 'Nunito Sans', weight: 400, fallback: SANS_FALLBACK, variable: true, weightRange: [200, 1000], hasItalic: true },
     note: 'Rounded geometric headline, soft body sans. Warm without tipping into childish.',
     sampleHeading: 'Say hello to your new colour ramp',
     sampleBody:
@@ -126,8 +132,8 @@ export const FONT_PAIRINGS: FontPairing[] = [
   {
     id: 'baloo-karla',
     mood: 'Playful',
-    heading: { family: 'Baloo 2', weight: 700, fallback: SANS_FALLBACK },
-    body: { family: 'Karla', weight: 400, fallback: SANS_FALLBACK },
+    heading: { family: 'Baloo 2', weight: 700, fallback: SANS_FALLBACK, variable: true, weightRange: [400, 800] },
+    body: { family: 'Karla', weight: 400, fallback: SANS_FALLBACK, variable: true, weightRange: [200, 800], hasItalic: true },
     note: 'Heavy rounded display with a slightly quirky grotesque body. Onboarding and empty states.',
     sampleHeading: 'Nothing here yet',
     sampleBody:
@@ -136,8 +142,8 @@ export const FONT_PAIRINGS: FontPairing[] = [
   {
     id: 'chivo-dm-sans',
     mood: 'Playful',
-    heading: { family: 'Chivo', weight: 700, fallback: SANS_FALLBACK },
-    body: { family: 'DM Sans', weight: 400, fallback: SANS_FALLBACK },
+    heading: { family: 'Chivo', weight: 700, fallback: SANS_FALLBACK, variable: true, weightRange: [100, 900], hasItalic: true },
+    body: { family: 'DM Sans', weight: 400, fallback: SANS_FALLBACK, variable: true, weightRange: [100, 1000], hasItalic: true },
     note: 'Punchy grotesque headline over a friendly low-contrast sans. Marketing pages with an edge.',
     sampleHeading: 'Ship the fix, not the finding.',
     sampleBody:

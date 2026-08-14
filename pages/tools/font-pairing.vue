@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import '~/assets/css/tool-fonts.css'
-import { FONT_MOODS, FONT_PAIRINGS, pairingCss } from '~/utils/tools/fonts'
+import { FONT_MOODS, FONT_PAIRINGS } from '~/utils/tools/fonts'
 import type { FontPairing } from '~/utils/tools/fonts'
 import type { Chip } from '~/types/tools'
 
@@ -26,6 +26,32 @@ const visible = computed(() =>
 
 function stack(face: FontPairing['heading']) {
   return `'${face.family}', ${face.fallback}`
+}
+
+const activePairing = ref<FontPairing | null>(null)
+const panelOpen = computed(() => activePairing.value !== null)
+const panelRef = ref<{ triggerRef: HTMLElement | null } | null>(null)
+const triggerRefs = ref<Map<string, HTMLElement>>(new Map())
+
+function openPanel(pairing: FontPairing, event: Event) {
+  activePairing.value = pairing
+  const button = event.currentTarget as HTMLElement
+  triggerRefs.value.set(pairing.id, button)
+  nextTick(() => {
+    if (panelRef.value) {
+      panelRef.value.triggerRef = button
+    }
+  })
+}
+
+function closePanel() {
+  const id = activePairing.value?.id
+  activePairing.value = null
+  if (id) {
+    nextTick(() => {
+      triggerRefs.value.get(id)?.focus()
+    })
+  }
 }
 </script>
 
@@ -82,13 +108,14 @@ function stack(face: FontPairing['heading']) {
           <p class="mt-8 text-[0.9375rem] leading-snug text-ink-muted">{{ pairing.note }}</p>
 
           <div class="mt-6">
-            <CopyButton
-              :value="pairingCss(pairing)"
-              label="Use this pairing"
-              variant="solid"
-              :aria-label="`Copy CSS for ${pairing.heading.family} with ${pairing.body.family}`"
-              :message="`${pairing.heading.family} + ${pairing.body.family} copied as CSS`"
-            />
+            <button
+              type="button"
+              class="caption inline-flex min-h-11 shrink-0 items-center justify-center gap-2 border border-ink bg-ink px-4 py-2 normal-case tracking-normal text-paper transition-colors duration-200 ease-editorial hover:border-blue hover:bg-blue"
+              :aria-label="`Use ${pairing.heading.family} with ${pairing.body.family}`"
+              @click="openPanel(pairing, $event)"
+            >
+              Use this pairing
+            </button>
           </div>
         </li>
       </ul>
@@ -98,9 +125,10 @@ function stack(face: FontPairing['heading']) {
       <div class="md:grid md:grid-cols-12 md:gap-x-8">
         <h2 id="loading-heading" class="caption md:col-span-3">On loading</h2>
         <p class="mt-4 measure text-ink-muted md:col-span-6 md:col-start-5 md:mt-0">
-          Every preview here is served from this domain. The copy-ready block uses a Google Fonts
-          import because that is the fastest path in most projects — swap it for self-hosted files
-          if your site makes the same promise this one does.
+          Every preview here is served from this domain. Click "Use this pairing" for
+          copy-ready code — choose between Google Fonts CDN and self-hosted files, with
+          framework-specific setup for Nuxt, Next.js, Vite, SvelteKit, Astro, or plain HTML.
+          Variable font and italic options are available where the typeface supports them.
         </p>
       </div>
     </section>
@@ -108,5 +136,13 @@ function stack(face: FontPairing['heading']) {
     <ToolReference slug="font-pairing" />
 
     <ToolFooterNav slug="font-pairing" />
+
+    <FontPairingPanel
+      v-if="activePairing"
+      ref="panelRef"
+      :pairing="activePairing"
+      :open="panelOpen"
+      @close="closePanel"
+    />
   </div>
 </template>
