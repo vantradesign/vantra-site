@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { EASING_PRESETS, formatCubicBezier, matchPreset } from '~/utils/tools/easing'
 import type { BezierPoints } from '~/utils/tools/easing'
-import type { Chip } from '~/types/tools'
 
 useToolPageSeo({
   slug: 'easing-curves',
@@ -12,11 +11,6 @@ useToolPageSeo({
 
 const points = ref<BezierPoints>({ x1: 0.2, y1: 0, x2: 0, y2: 1 })
 const duration = ref(900)
-
-const chips: Chip[] = EASING_PRESETS.map((preset) => ({
-  value: preset.value,
-  label: preset.label,
-}))
 
 const preset = computed({
   get: () => matchPreset(points.value)?.value ?? '',
@@ -87,11 +81,16 @@ function pointerToCurve(event: PointerEvent) {
   if (!element) return null
 
   const box = element.getBoundingClientRect()
-  const x = (event.clientX - box.left) / box.width
-  /* The viewBox spans y from -50 to 150 in SVG units, i.e. 1.5 down to -0.5. */
-  const svgY = Y_MAX - ((event.clientY - box.top) / box.height) * (Y_MAX - Y_MIN)
+  /* viewBox is -4 -4 108 108. Map pixel position to SVG units, then to curve
+     coordinates. The curve's x runs 0–100 in SVG, y runs 100 (bottom) to
+     0 (top) mapped via toSvgY. */
+  const svgX = -4 + ((event.clientX - box.left) / box.width) * 108
+  const svgYCoord = -4 + ((event.clientY - box.top) / box.height) * 108
 
-  return { x, y: svgY }
+  const x = svgX / 100
+  const y = 1 - svgYCoord / 100
+
+  return { x, y }
 }
 
 function onPointerDown(handle: 'p1' | 'p2', event: PointerEvent) {
@@ -157,13 +156,22 @@ function handleValueText(handle: 'p1' | 'p2') {
 }
 
 /* Preview. `running` drives the transition; the nextTick round-trip is what
-   makes the button repeatable rather than a one-shot. */
+   makes the button repeatable rather than a one-shot. Auto-reset after the
+   transition finishes so the user can replay without manually resetting. */
 const running = ref(false)
+const previewEl = ref<HTMLElement | null>(null)
 
 async function play() {
   running.value = false
   await nextTick()
   running.value = true
+}
+
+function onPreviewTransitionEnd() {
+  if (!running.value) return
+  setTimeout(async () => {
+    running.value = false
+  }, 400)
 }
 
 const numericFields = computed(() => [
@@ -203,85 +211,91 @@ const css = computed(() =>
     <section aria-labelledby="curve-heading" class="gutter mt-20 md:mt-28">
       <h2 id="curve-heading" class="caption">The curve</h2>
 
-      <div class="mt-8">
-        <ToolChipRail v-model="preset" label="Presets" :chips="chips" />
-      </div>
+      <div class="mt-14 lg:grid lg:grid-cols-12 lg:gap-x-8">
+        <!-- Left column: presets -->
+        <div class="lg:col-span-4">
+          <EasingPresetPicker v-model="preset" />
+        </div>
 
-      <div class="mt-14 md:grid md:grid-cols-12 md:gap-x-8">
-        <div class="md:col-span-7">
-          <svg
-            ref="svg"
-            viewBox="0 -50 100 200"
-            class="w-full touch-none select-none"
-            role="group"
-            aria-label="Cubic bezier curve editor"
-            @pointermove="onPointerMove"
-            @pointerup="onPointerUp"
-            @pointerleave="onPointerUp"
-            @pointercancel="onPointerUp"
-          >
-            <rect x="0" y="0" width="100" height="100" fill="none" stroke="var(--color-rule)" stroke-width="0.5" />
-            <line x1="0" y1="100" x2="100" y2="100" stroke="var(--color-rule)" stroke-width="0.5" />
-
-            <line
-              x1="0"
-              y1="100"
-              :x2="toSvgX(points.x1)"
-              :y2="toSvgY(points.y1)"
-              stroke="var(--color-ink-faint)"
-              stroke-width="0.5"
-            />
-            <line
-              x1="100"
-              y1="0"
-              :x2="toSvgX(points.x2)"
-              :y2="toSvgY(points.y2)"
-              stroke="var(--color-ink-faint)"
-              stroke-width="0.5"
-            />
-
-            <path :d="curvePath" fill="none" stroke="var(--color-ink)" stroke-width="1.25" />
-
-            <!-- Each handle carries a transparent 44-unit hit area so touch and
-                 coarse pointers get a target the visible dot does not need. -->
-            <g
-              v-for="handle in (['p1', 'p2'] as const)"
-              :key="handle"
-              tabindex="0"
-              role="slider"
-              :aria-label="handle === 'p1' ? 'Control point 1' : 'Control point 2'"
-              :aria-valuetext="handleValueText(handle)"
-              class="cursor-grab focus-visible:outline-2 focus-visible:outline-blue"
-              @pointerdown="onPointerDown(handle, $event)"
-              @keydown="onHandleKeydown(handle, $event)"
+        <!-- Centre column: curve graph -->
+        <div class="mt-12 lg:col-span-4 lg:mt-0">
+          <div class="w-full">
+            <svg
+              ref="svg"
+              viewBox="-4 -4 108 108"
+              class="w-full touch-none select-none overflow-visible"
+              role="group"
+              aria-label="Cubic bezier curve editor"
+              @pointermove="onPointerMove"
+              @pointerup="onPointerUp"
+              @pointerleave="onPointerUp"
+              @pointercancel="onPointerUp"
             >
-              <circle
-                :cx="handle === 'p1' ? toSvgX(points.x1) : toSvgX(points.x2)"
-                :cy="handle === 'p1' ? toSvgY(points.y1) : toSvgY(points.y2)"
-                r="7"
-                fill="transparent"
-              />
-              <circle
-                :cx="handle === 'p1' ? toSvgX(points.x1) : toSvgX(points.x2)"
-                :cy="handle === 'p1' ? toSvgY(points.y1) : toSvgY(points.y2)"
-                r="2.5"
-                fill="var(--color-paper)"
-                stroke="var(--color-blue)"
-                stroke-width="1.25"
-              />
-            </g>
-          </svg>
+              <rect x="0" y="0" width="100" height="100" fill="none" stroke="var(--color-rule)" stroke-width="0.5" />
+              <line x1="0" y1="100" x2="100" y2="100" stroke="var(--color-rule)" stroke-width="0.5" />
 
-          <p class="caption mt-4 normal-case tracking-normal text-ink-muted">
+              <line
+                x1="0"
+                y1="100"
+                :x2="toSvgX(points.x1)"
+                :y2="toSvgY(points.y1)"
+                stroke="var(--color-ink-faint)"
+                stroke-width="0.5"
+              />
+              <line
+                x1="100"
+                y1="0"
+                :x2="toSvgX(points.x2)"
+                :y2="toSvgY(points.y2)"
+                stroke="var(--color-ink-faint)"
+                stroke-width="0.5"
+              />
+
+              <path :d="curvePath" fill="none" stroke="var(--color-ink)" stroke-width="1.25" />
+
+              <!-- Each handle carries a transparent hit area (r=5, ~32px at 320px
+                   graph width) so touch and coarse pointers get a target that meets
+                   WCAG 2.5.5 without the visible dot being oversized. -->
+              <g
+                v-for="handle in (['p1', 'p2'] as const)"
+                :key="handle"
+                tabindex="0"
+                role="slider"
+                :aria-label="handle === 'p1' ? 'Control point 1' : 'Control point 2'"
+                :aria-valuetext="handleValueText(handle)"
+                class="cursor-grab focus-visible:outline-2 focus-visible:outline-blue"
+                @pointerdown="onPointerDown(handle, $event)"
+                @keydown="onHandleKeydown(handle, $event)"
+              >
+                <circle
+                  :cx="handle === 'p1' ? toSvgX(points.x1) : toSvgX(points.x2)"
+                  :cy="handle === 'p1' ? toSvgY(points.y1) : toSvgY(points.y2)"
+                  r="5"
+                  fill="transparent"
+                />
+                <circle
+                  :cx="handle === 'p1' ? toSvgX(points.x1) : toSvgX(points.x2)"
+                  :cy="handle === 'p1' ? toSvgY(points.y1) : toSvgY(points.y2)"
+                  r="2"
+                  fill="var(--color-paper)"
+                  stroke="var(--color-blue)"
+                  stroke-width="1"
+                />
+              </g>
+            </svg>
+          </div>
+
+          <p class="caption mt-4 text-center normal-case tracking-normal text-ink-muted">
             Drag a handle, or focus it and use the arrow keys. Hold shift for larger steps.
           </p>
         </div>
 
-        <div class="mt-16 md:col-span-4 md:col-start-9 md:mt-0">
+        <!-- Right column: values + controls -->
+        <div class="mt-12 lg:col-span-4 lg:mt-0">
           <p class="caption">Value</p>
-          <p class="mt-3 font-display text-title tabular-nums">
+          <output class="mt-3 block font-display text-title tabular-nums" aria-live="off">
             {{ timingFunction }}
-          </p>
+          </output>
 
           <ToolStatus :text="statusText" />
 
@@ -319,11 +333,13 @@ const css = computed(() =>
         <div class="flex flex-wrap items-end justify-between gap-8">
           <button
             type="button"
-            class="caption inline-flex min-h-11 items-center gap-2 border border-ink bg-ink px-5 text-paper normal-case tracking-normal transition-colors duration-200 ease-editorial hover:border-blue hover:bg-blue"
+            :disabled="running"
+            class="caption inline-flex min-h-11 items-center gap-2 border px-5 normal-case tracking-normal transition-colors duration-200 ease-editorial disabled:cursor-not-allowed disabled:border-rule disabled:bg-rule disabled:text-ink-muted"
+            :class="running ? '' : 'border-ink bg-ink text-paper hover:border-blue hover:bg-blue'"
             @click="play"
           >
-            <span aria-hidden="true">▶</span>
-            Play preview
+            <span aria-hidden="true">{{ running ? '⏸' : '▶' }}</span>
+            {{ running ? 'Playing…' : 'Play preview' }}
           </button>
 
           <div class="w-full max-w-xs">
@@ -335,6 +351,7 @@ const css = computed(() =>
              end point is `100% - width` without needing container queries. -->
         <div class="relative mt-12 h-[6.5rem] border-t border-rule pt-12" aria-hidden="true">
           <div
+            ref="previewEl"
             class="absolute top-12 size-14 bg-blue"
             :style="{
               left: running ? 'calc(100% - 3.5rem)' : '0px',
@@ -342,6 +359,7 @@ const css = computed(() =>
               transitionDuration: `${duration}ms`,
               transitionTimingFunction: timingFunction,
             }"
+            @transitionend="onPreviewTransitionEnd"
           />
         </div>
       </div>
