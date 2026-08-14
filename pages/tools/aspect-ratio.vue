@@ -7,21 +7,12 @@ import {
   reduceRatio,
 } from '~/utils/tools/ratio'
 import type { Chip } from '~/types/tools'
-import type { MoodImage } from '~/types/product'
-
 useToolPageSeo({
   slug: 'aspect-ratio',
   title: 'Aspect Ratio Calculator',
   description:
     'Ratio to dimension, dimension to ratio, and proportional resize — with a live preview and a printable reference table.',
 })
-
-const crop: MoodImage = {
-  src: '/editorial/10-studio-detail.avif',
-  alt: 'A studio desk detail in daylight, cropped to a wide editorial frame.',
-  focal: '50% 45%',
-  placeholder: true,
-}
 
 const chips: Chip[] = ASPECT_PRESETS.map((preset) => ({
   value: preset.label,
@@ -112,6 +103,20 @@ const previewName = computed(() => {
   const w = positive(ratioW.value)
   const h = positive(ratioH.value)
   return w && h ? nameForRatio(w, h) : 'Custom'
+})
+
+/**
+ * The preview rectangle must fit inside a fixed-height container (28 rem) so
+ * that switching ratios never shifts any content below it — the textbook CLS
+ * fix. Width is computed with `min()` so the rectangle is as large as possible
+ * without exceeding either the container width (responsive) or the container
+ * height (via aspect-ratio geometry: height = width × h / w ≤ 28 rem →
+ * width ≤ 28 rem × w / h).
+ */
+const previewBoxWidth = computed(() => {
+  const w = positive(ratioW.value) ?? 16
+  const h = positive(ratioH.value) ?? 9
+  return `min(100%, calc(28rem * ${w} / ${h}))`
 })
 
 watch(preset, (label) => {
@@ -209,18 +214,6 @@ const resizeResult = computed(() => {
       cover-line="A frame decides what the picture is about."
       lead="The same photograph reads as reportage at 3:2, as fashion at 4:5, and as cinema at 21:9. Choosing a ratio is an editorial decision that happens to require arithmetic — so here is the arithmetic, in three directions."
     />
-
-    <figure class="gutter mt-16">
-      <div class="relative overflow-hidden" :style="{ aspectRatio: previewRatio }">
-        <MoodImage :image="crop" sizes="100vw" />
-      </div>
-      <figcaption class="pt-4">
-        <EditorialCaption
-          :index="previewName"
-          :text="`The same crop, held at ${formatRatioNotation(reduceRatio(Number(ratioW) || 16, Number(ratioH) || 9))}. Change the ratio below and this frame follows.`"
-        />
-      </figcaption>
-    </figure>
 
     <section aria-labelledby="calculators-heading" class="gutter mt-20 md:mt-28">
       <h2 id="calculators-heading" class="caption">The three calculations</h2>
@@ -361,15 +354,17 @@ const resizeResult = computed(() => {
       <h2 id="preview-heading" class="caption">Live proportion</h2>
 
       <div class="mt-8 border-t border-ink pt-10">
-        <div
-          class="ratio-preview mx-auto w-full max-w-3xl border border-ink"
-          :style="{ aspectRatio: previewRatio }"
-          role="img"
-          :aria-label="`Rectangle at ratio ${ratioW} to ${ratioH}, ${previewName}`"
-        >
-          <p class="caption flex h-full items-end p-4 tabular-nums text-ink-muted">
-            {{ ratioW }} : {{ ratioH }} — {{ previewName }}
-          </p>
+        <div class="mx-auto flex h-[28rem] max-w-3xl items-center justify-center">
+          <div
+            class="ratio-preview border border-ink transition-[width] duration-300 ease-editorial"
+            :style="{ aspectRatio: previewRatio, width: previewBoxWidth }"
+            role="img"
+            :aria-label="`Rectangle at ratio ${ratioW} to ${ratioH}, ${previewName}`"
+          >
+            <p class="caption flex h-full items-end p-4 tabular-nums text-ink-muted">
+              {{ ratioW }} : {{ ratioH }} — {{ previewName }}
+            </p>
+          </div>
         </div>
       </div>
     </section>
