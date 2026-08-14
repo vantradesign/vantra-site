@@ -2,13 +2,36 @@
 import { contrastRatio, formatRatio, wcagVerdicts } from '~/utils/tools/color'
 import { COLOR_TOKENS, tokenByHex } from '~/utils/tools/tokens'
 import type { Chip } from '~/types/tools'
+import type { ParseResult, ParsedColorToken } from '~/utils/tools/token-parser'
 
 useToolPageSeo({
   slug: 'contrast-checker',
   title: 'Contrast Checker',
   description:
-    'Check WCAG contrast between two colours, with the Vantra palette available as presets. Runs entirely in the browser.',
+    'Check WCAG contrast between two colours, with the Vantra palette available as presets. Upload a JSON or CSS design token file for batch checking. Runs entirely in the browser.',
 })
+
+// ── Mode toggle ────────────────────────────────────────────────────────────
+
+const mode = ref<'manual' | 'batch'>('manual')
+
+// ── Batch state ────────────────────────────────────────────────────────────
+
+const batchTokens = ref<ParsedColorToken[]>([])
+const batchWarnings = ref<string[]>([])
+const batchFilename = ref('')
+
+function onParsed(result: ParseResult & { filename: string }) {
+  batchTokens.value = result.tokens
+  batchWarnings.value = result.warnings
+  batchFilename.value = result.filename
+}
+
+function resetBatch() {
+  batchTokens.value = []
+  batchWarnings.value = []
+  batchFilename.value = ''
+}
 
 const foreground = ref('#001619')
 const background = ref('#f5f2f3')
@@ -82,7 +105,19 @@ const statusText = computed(() => {
     <section aria-labelledby="checker-heading" class="gutter mt-20 md:mt-28">
       <h2 id="checker-heading" class="sr-only">Contrast checker</h2>
 
-      <div class="md:grid md:grid-cols-12 md:gap-x-8">
+      <div class="mb-10">
+        <ToolToggle
+          v-model="mode"
+          label="Check mode"
+          :options="[
+            { value: 'manual', label: 'Manual' },
+            { value: 'batch', label: 'Batch (tokens)' },
+          ]"
+        />
+      </div>
+
+      <!-- ── Manual mode (unchanged) ──────────────────────────────────── -->
+      <div v-if="mode === 'manual'" class="md:grid md:grid-cols-12 md:gap-x-8">
         <div class="md:col-span-6">
           <ToolChipRail
             v-model="foreground"
@@ -171,6 +206,22 @@ const statusText = computed(() => {
             />
           </div>
         </div>
+      </div>
+
+      <!-- ── Batch mode ───────────────────────────────────────────────── -->
+      <div v-else>
+        <TokenFileUpload
+          v-if="batchTokens.length === 0"
+          @parsed="onParsed"
+        />
+
+        <ContrastMatrix
+          v-else
+          :tokens="batchTokens"
+          :filename="batchFilename"
+          :warnings="batchWarnings"
+          @reset="resetBatch"
+        />
       </div>
     </section>
 
