@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "nuxt dev",
-    "build": "nuxt build",
+    "build": "nuxt build && node scripts/inject-csp-hashes.mjs",
     "generate": "nuxt generate && node scripts/inject-csp-hashes.mjs",
     "generate:nocsp": "nuxt generate",
     "preview": "nuxt preview",
