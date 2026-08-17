@@ -99,7 +99,7 @@ const currentExport = computed(() => {
 })
 
 const exportLabel = computed(() => {
-  if (exportMode.value === 'tailwind') return 'Tailwind config'
+  if (exportMode.value === 'tailwind') return 'Tailwind v3 config'
   if (exportMode.value === 'dtcg') return 'DTCG JSON'
   return 'CSS custom properties'
 })
@@ -188,7 +188,10 @@ const statusText = computed(() => {
               :class="flashed === step.step ? 'ring-2 ring-ink ring-offset-2 ring-offset-paper' : ''"
               :style="{ backgroundColor: step.hex, color: bestTextOn(step.hex) }"
             >
-              <span class="caption normal-case tracking-normal">
+              <span
+                class="caption normal-case tracking-normal"
+                :style="{ color: bestTextOn(step.hex) }"
+              >
                 {{ flashed === step.step ? 'Copied' : step.hex }}
               </span>
             </span>
@@ -223,7 +226,7 @@ const statusText = computed(() => {
           label="Export format"
           :options="[
             { value: 'css', label: 'CSS' },
-            { value: 'tailwind', label: 'Tailwind' },
+            { value: 'tailwind', label: 'Tailwind v3' },
             { value: 'dtcg', label: 'DTCG' },
           ]"
         />
@@ -235,6 +238,10 @@ const statusText = computed(() => {
         :copy-label="`Copy ${exportLabel}`"
         :message="`${exportLabel} copied`"
       />
+
+      <p v-if="exportMode === 'tailwind'" class="caption mt-4 normal-case tracking-normal text-ink-faint">
+        This format is for Tailwind v3 and its <code class="font-mono">tailwind.config</code> file. Tailwind v4 uses CSS-native configuration — use the CSS export instead.
+      </p>
     </section>
 
     <ToolStatus :text="statusText" />

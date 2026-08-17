@@ -89,9 +89,9 @@ const cssVariables = computed(() =>
           <div class="mt-8 flex flex-wrap gap-4">
             <CopyButton
               :value="tailwindConfig"
-              label="Export as Tailwind config"
+              label="Export as Tailwind v3 config"
               variant="solid"
-              message="Tailwind config copied"
+              message="Tailwind v3 config copied"
             />
             <CopyButton
               :value="cssVariables"
@@ -123,7 +123,10 @@ const cssVariables = computed(() =>
               :class="flashed === step.step ? 'ring-2 ring-ink ring-offset-2 ring-offset-paper' : ''"
               :style="{ backgroundColor: step.hex, color: bestTextOn(step.hex) }"
             >
-              <span class="caption normal-case tracking-normal">
+              <span
+                class="caption normal-case tracking-normal"
+                :style="{ color: bestTextOn(step.hex) }"
+              >
                 {{ flashed === step.step ? 'Copied' : step.hex }}
               </span>
             </span>
@@ -151,7 +154,11 @@ const cssVariables = computed(() =>
 
     <section aria-labelledby="ramp-output-heading" class="gutter mt-section">
       <h2 id="ramp-output-heading" class="sr-only">Copy-ready output</h2>
-      <CodeBlock :code="tailwindConfig" label="Tailwind config" copy-label="Copy config" />
+      <CodeBlock :code="tailwindConfig" label="Tailwind v3 config" copy-label="Copy config" />
+
+      <p class="caption mt-4 normal-case tracking-normal text-ink-faint">
+        This format is for Tailwind v3 and its <code class="font-mono">tailwind.config</code> file. Tailwind v4 uses CSS-native configuration — use the CSS variables export instead.
+      </p>
     </section>
 
     <ToolReference slug="shade-tint-generator" />

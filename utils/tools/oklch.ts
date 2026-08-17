@@ -193,7 +193,32 @@ export function generateOklchRamp(hex: string): OklchRampStep[] {
   const base = hexToOklch(hex)
   if (!base) return []
 
+  // Find the step whose target lightness is closest to the source colour
+  // and anchor it to the exact source, so the input always appears in the ramp.
+  let anchorStep: number | null = null
+  let anchorDist = Infinity
+  for (const step of OKLCH_RAMP_STEPS) {
+    const dist = Math.abs(LIGHTNESS_TARGETS[step]! - base.l)
+    if (dist < anchorDist) {
+      anchorDist = dist
+      anchorStep = step
+    }
+  }
+
   return OKLCH_RAMP_STEPS.map((step) => {
+    // Use the original colour directly for the anchor step
+    if (step === anchorStep) {
+      const clamped = clampToSrgb(base)
+      const stepHex = oklchToHex(clamped)
+      return {
+        step,
+        hex: stepHex,
+        oklch: clamped,
+        contrastOnWhite: contrastRatio('#ffffff', stepHex),
+        contrastOnBlack: contrastRatio('#000000', stepHex),
+      }
+    }
+
     const targetL = LIGHTNESS_TARGETS[step]!
     const scale = chromaScale(targetL, base.l)
     const targetC = base.c * scale

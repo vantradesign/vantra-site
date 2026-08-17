@@ -250,7 +250,7 @@ const statusText = computed(() =>
           label="Export format"
           :options="[
             { value: 'css', label: 'CSS' },
-            { value: 'tailwind', label: 'Tailwind' },
+            { value: 'tailwind', label: 'Tailwind v3' },
           ]"
         />
 
@@ -270,9 +270,13 @@ const statusText = computed(() =>
       <div class="mt-6">
         <CodeBlock
           :code="currentExport"
-          :label="exportMode === 'tailwind' ? 'Tailwind config' : 'CSS custom properties'"
+          :label="exportMode === 'tailwind' ? 'Tailwind v3 config' : 'CSS custom properties'"
           :copy-label="`Copy ${exportMode === 'tailwind' ? 'config' : 'CSS'}`"
         />
+
+        <p v-if="exportMode === 'tailwind'" class="caption mt-4 normal-case tracking-normal text-ink-faint">
+          This format is for Tailwind v3 and its <code class="font-mono">tailwind.config</code> file. Tailwind v4 uses CSS-native configuration — use the CSS export instead.
+        </p>
       </div>
     </section>
 

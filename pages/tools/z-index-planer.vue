@@ -211,23 +211,20 @@ const statusText = computed(() =>
         <div class="mt-12 md:col-span-5 md:col-start-8 md:mt-0">
           <p class="caption mb-4">Stacking preview</p>
 
-          <div class="relative" style="min-height: 20rem">
+          <div class="relative" style="min-height: 28rem">
             <div
               v-for="(layer, i) in sortedLayers"
               :key="layer.id"
-              class="absolute left-0 border transition-all duration-300 ease-editorial"
-              :class="i === sortedLayers.length - 1
-                ? 'border-blue bg-blue/8'
-                : 'border-rule bg-paper'"
+              class="absolute left-0 border border-rule bg-paper transition-all duration-300 ease-editorial"
               :style="{
-                bottom: `${(layer.value / maxValue) * 60}%`,
+                bottom: `${(layer.value / maxValue) * 75}%`,
                 left: `${i * 12}px`,
                 right: `${(sortedLayers.length - 1 - i) * 12}px`,
-                height: '3.5rem',
+                height: '4.5rem',
                 zIndex: layer.value,
               }"
             >
-              <span class="caption absolute left-3 top-2 normal-case tracking-normal text-ink">
+              <span class="caption absolute left-3 bottom-2 normal-case tracking-normal text-ink">
                 {{ layer.label }}
               </span>
               <span class="caption absolute right-3 bottom-2 tabular-nums text-ink-faint">
@@ -242,13 +239,13 @@ const statusText = computed(() =>
     <section aria-labelledby="zindex-export-heading" class="gutter mt-section">
       <h2 id="zindex-export-heading" class="caption">Export</h2>
 
-      <div class="mt-6 flex flex-wrap items-start gap-6">
+      <div class="mt-6 flex flex-wrap items-end gap-6">
         <ToolToggle
           v-model="exportMode"
           label="Export format"
           :options="[
             { value: 'css', label: 'CSS' },
-            { value: 'tailwind', label: 'Tailwind' },
+            { value: 'tailwind', label: 'Tailwind v3' },
           ]"
         />
 
@@ -268,9 +265,13 @@ const statusText = computed(() =>
       <div class="mt-6">
         <CodeBlock
           :code="currentExport"
-          :label="exportMode === 'tailwind' ? 'Tailwind config' : 'CSS custom properties'"
+          :label="exportMode === 'tailwind' ? 'Tailwind v3 config' : 'CSS custom properties'"
           :copy-label="`Copy ${exportMode === 'tailwind' ? 'config' : 'CSS'}`"
         />
+
+        <p v-if="exportMode === 'tailwind'" class="caption mt-4 normal-case tracking-normal text-ink-faint">
+          This format is for Tailwind v3 and its <code class="font-mono">tailwind.config</code> file. Tailwind v4 uses CSS-native configuration — use the CSS export instead.
+        </p>
       </div>
     </section>
 
