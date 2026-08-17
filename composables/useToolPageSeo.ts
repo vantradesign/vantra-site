@@ -32,6 +32,9 @@ const CATEGORY_BY_DISCIPLINE = {
   Layout: 'DeveloperApplication',
   Motion: 'DeveloperApplication',
   Units: 'DeveloperApplication',
+  Governance: 'DesignApplication',
+  Assets: 'DesignApplication',
+  Content: 'DesignApplication',
 } as const
 
 export function useToolPageSeo(options: {

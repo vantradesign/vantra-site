@@ -814,6 +814,487 @@ export const toolReference: ToolReferenceEntry[] = [
       },
     ],
   },
+  {
+    slug: 'color-ramp-generator',
+    answer:
+      'An OKLCH colour ramp sets each step to a target lightness while holding hue and scaling chroma to stay in sRGB gamut. OKLCH produces perceptually even steps where HSL does not, because OKLAB models human colour perception rather than display hardware.',
+    sections: [
+      {
+        heading: 'Why does an OKLCH ramp look more even than an HSL ramp?',
+        body: [
+          'HSL lightness is a measure of display output, not of how light a colour appears. An HSL step from 50% to 60% in a blue hue looks like a much larger jump than the same step in yellow, because human vision is unequally sensitive to different hues.',
+          'OKLCH lightness is perceptual: a 0.1 step looks roughly the same regardless of hue. The chroma axis is also perceptual, so reducing chroma at the extremes keeps the tints from going chalky and the shades from turning muddy.',
+        ],
+      },
+      {
+        heading: 'What is gamut mapping and why does it matter for ramps?',
+        body: [
+          'Not every OKLCH combination fits inside the sRGB gamut that screens display. A high-chroma cyan at very high or very low lightness may require more saturation than sRGB can render.',
+          'This tool reduces chroma with a binary search until the colour fits. The alternative — clamping each RGB channel — shifts the hue, which is exactly what a ramp must not do.',
+        ],
+      },
+      {
+        heading: 'How does the ramp connect to the token schema?',
+        body: [
+          'Each ramp step is saved as a colour primitive in the shared token schema, keyed as name-step (e.g. brand-500). Other tools — the focus-ring generator, the dark-mode previewer — read these primitives, so a ramp generated here feeds the rest of the system.',
+          'The schema also records the OKLCH values and contrast metadata per step, so downstream tools can make accessibility decisions without re-computing.',
+        ],
+      },
+    ],
+    table: {
+      caption: 'OKLCH ramp target lightness per step',
+      columns: ['Step', 'Target lightness', 'Character'],
+      rows: [
+        ['50', '0.97', 'Near-white tint'],
+        ['100', '0.93', 'Very pale tint'],
+        ['200', '0.87', 'Pale tint'],
+        ['300', '0.78', 'Light'],
+        ['400', '0.68', 'Medium-light'],
+        ['500', '0.57', 'Midpoint'],
+        ['600', '0.48', 'Medium-dark'],
+        ['700', '0.39', 'Dark'],
+        ['800', '0.30', 'Deep shade'],
+        ['900', '0.21', 'Very deep shade'],
+        ['950', '0.14', 'Near-black shade'],
+      ],
+    },
+    faq: [
+      {
+        question: 'What is the difference between this and the Shade & Tint Generator?',
+        answer:
+          'The Shade & Tint Generator uses HSL and produces a standalone palette. This tool uses OKLCH for perceptually even steps and saves the result into the shared token schema, where other tools can consume it.',
+      },
+      {
+        question: 'How many steps does the ramp produce?',
+        answer:
+          'Eleven: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900 and 950. This matches the convention used by Tailwind and most design systems, with the addition of 950 for near-black.',
+      },
+      {
+        question: 'Can I export the ramp without saving to the schema?',
+        answer:
+          'Yes. The CSS and Tailwind exports are always available. Saving to the schema is a separate action that makes the ramp available to other tools.',
+      },
+    ],
+    sources: [
+      {
+        label: 'Björn Ottosson — A perceptual color space for image processing (OKLAB)',
+        href: 'https://bottosson.github.io/posts/oklab/',
+      },
+      {
+        label: 'CSS Color Module Level 4 — oklch()',
+        href: 'https://www.w3.org/TR/css-color-4/#funcdef-oklch',
+      },
+    ],
+  },
+
+  {
+    slug: 'z-index-planer',
+    answer:
+      'A z-index scale is a set of named values spaced at regular intervals — typically 100 — so new layers can be inserted between existing ones without renumbering. Named tokens replace arbitrary z-index: 9999 declarations with reviewable, documented decisions.',
+    sections: [
+      {
+        heading: 'Why should z-index values be spaced rather than sequential?',
+        body: [
+          'Spacing at intervals of 100 leaves room to insert a new layer between any two existing ones without changing the values that are already in production. Sequential values (1, 2, 3) force a renumber the moment anything is added in the middle.',
+          'The interval itself does not matter — 10, 50 or 100 all work — but 100 is the convention because it leaves 99 insertion slots per gap, which is more than any project will need.',
+        ],
+      },
+      {
+        heading: 'What layers should a z-index scale include?',
+        body: [
+          'A practical set covers base content (0), dropdowns (100), sticky navigation (200), overlays (300), modals (400), toasts (500) and tooltips (600). Most products never need more than seven.',
+          'The order matters more than the count. A tooltip must sit above a modal, and a modal above its overlay, and getting that wrong is the specific bug that named tokens prevent.',
+        ],
+      },
+      {
+        heading: 'How does this tool save z-index tokens?',
+        body: [
+          'Each layer is saved as a named token in the shared schema under the zIndex category. The key is the slug (e.g. "modal"), the value is the number, and the label is the human-readable name. These tokens export as CSS custom properties or Tailwind config.',
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: 'What is the highest z-index a browser supports?',
+        answer:
+          'The maximum is 2147483647, which is the largest 32-bit signed integer. In practice, any value above a few thousand is a sign that the scale has lost control.',
+      },
+      {
+        question: 'Do z-index tokens work with CSS custom properties?',
+        answer:
+          'Yes. z-index accepts any integer, including one resolved from a custom property via var(--z-modal). This is the format this tool exports.',
+      },
+      {
+        question: 'Can I use negative z-index values?',
+        answer:
+          'Yes. A negative z-index places an element behind its stacking context, which is useful for decorative pseudo-elements that should sit behind content. This tool supports negative values.',
+      },
+    ],
+    sources: [
+      {
+        label: 'MDN — z-index',
+        href: 'https://developer.mozilla.org/en-US/docs/Web/CSS/z-index',
+      },
+      {
+        label: 'MDN — Understanding CSS stacking context',
+        href: 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context',
+      },
+    ],
+  },
+
+  {
+    slug: 'breakpoint-planer',
+    answer:
+      'A responsive breakpoint is a viewport width at which the layout changes. Breakpoints are most useful when they are named, documented, and derived from content needs rather than copied from a framework default.',
+    sections: [
+      {
+        heading: 'How should breakpoints be chosen?',
+        body: [
+          'Start from the content, not from device sizes. A breakpoint belongs where the layout breaks — where a line becomes too long, a sidebar too narrow, or a grid too crowded. Testing with real content at a slowly widening viewport reveals these points.',
+          'Device-based breakpoints (phone/tablet/desktop) fail because devices do not cluster neatly into three sizes. Content-based breakpoints survive new hardware.',
+        ],
+      },
+      {
+        heading: 'Should breakpoints use px, em or rem?',
+        body: [
+          'em is the most robust unit for media queries because it responds to the user\'s browser font-size setting. A user who sets their font to 20px effectively shifts every em breakpoint, which means they get the layout that fits their actual readable line length.',
+          'px is simpler and more predictable, and is what Tailwind and most frameworks use. The practical difference is small, because few users change their default font size.',
+        ],
+      },
+      {
+        heading: 'How do breakpoints relate to the token schema?',
+        body: [
+          'Breakpoints saved here appear in the schema alongside colour and z-index tokens. This means the same JSON or CSS export includes all three, and a change to the breakpoint set is versioned in the same file as a colour change.',
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: 'What breakpoints does Tailwind CSS use?',
+        answer:
+          'Tailwind\'s defaults are sm: 640px, md: 768px, lg: 1024px, xl: 1280px and 2xl: 1536px. These are reasonable starting points but should be validated against the project\'s actual content.',
+      },
+      {
+        question: 'Can I use custom breakpoint names instead of sm/md/lg?',
+        answer:
+          'Yes. This tool accepts any name. Some teams prefer descriptive names like compact/regular/wide over size-based abbreviations.',
+      },
+      {
+        question: 'How many breakpoints should a project have?',
+        answer:
+          'Three to five. Fewer than three often means a painful jump; more than five means the responsive logic is hard to reason about and test.',
+      },
+    ],
+    sources: [
+      {
+        label: 'MDN — Using media queries',
+        href: 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries',
+      },
+      {
+        label: 'MDN — Responsive design',
+        href: 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Responsive_Design',
+      },
+    ],
+  },
+
+  {
+    slug: 'icon-grid-checker',
+    answer:
+      'An icon grid (or keyline grid) is a fixed viewBox — usually 24×24 — with a padding zone and alignment guides. Consistent icons share a viewBox size, a stroke width, and optical alignment within the padding zone.',
+    sections: [
+      {
+        heading: 'What makes an icon set consistent?',
+        body: [
+          'Three properties must be identical across every icon: the viewBox dimensions, the stroke width, and the padding zone. If any of these differ, the icons will appear to be different sizes even when they are rendered at the same CSS width.',
+          'Optical alignment is the harder requirement. A circle that fills the grid to the edge looks larger than a triangle at the same size, because the triangle has less visual mass. The keyline grid — a circle and a square overlaid inside the padding zone — guides the designer to compensate.',
+        ],
+      },
+      {
+        heading: 'Why is the viewBox more important than width and height?',
+        body: [
+          'The viewBox defines the internal coordinate system; width and height define how large it renders. An icon with viewBox="0 0 24 24" and one with viewBox="0 0 512 512" both render at 24px if the CSS says so, but a stroke-width of 2 in the first is 0.09 in the second.',
+          'Normalising the viewBox is therefore the first step. Inconsistent coordinate systems make stroke-width comparisons meaningless.',
+        ],
+      },
+      {
+        heading: 'What does this tool check?',
+        body: [
+          'Three things per icon: whether the viewBox matches the expected grid size, whether any explicit stroke-width values match the expected standard, and whether the content sits within the padding zone. Each check produces a pass or fail, and the summary table shows the result per icon.',
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: 'What viewBox size should icons use?',
+        answer:
+          '24×24 is the most common standard, used by Material, Feather and Heroicons. Some sets use 20×20 or 16×16 for smaller contexts. The important thing is that every icon in the set uses the same viewBox.',
+      },
+      {
+        question: 'Does this tool modify my SVGs?',
+        answer:
+          'No. It reads the SVG source, runs the checks, and displays the results. Nothing is written back to the file. Optimisation tools like SVGO are for a separate step.',
+      },
+      {
+        question: 'Can I check icons from different icon libraries at once?',
+        answer:
+          'Yes, but icons from different libraries will almost certainly fail because they use different viewBox sizes and stroke widths. That is information worth having.',
+      },
+    ],
+    sources: [
+      {
+        label: 'MDN — SVG viewBox attribute',
+        href: 'https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox',
+      },
+      {
+        label: 'Material Design — System icons guidelines',
+        href: 'https://m3.material.io/styles/icons/overview',
+      },
+    ],
+  },
+
+  {
+    slug: 'focus-ring-generator',
+    answer:
+      'A WCAG-compliant focus ring needs at least 3:1 contrast against the surface behind it (success criterion 1.4.11 Non-text Contrast). A two-tone ring — a coloured outline with a paper-coloured box-shadow halo — ensures visibility on both light and dark surfaces.',
+    sections: [
+      {
+        heading: 'What contrast does a focus ring need?',
+        body: [
+          'WCAG 2.2 success criterion 1.4.11 Non-text Contrast requires 3:1 between the focus indicator and the adjacent background. This applies to the outline colour against the surface the control sits on, not against the control itself.',
+          'A ring that passes on a white background may fail on a dark sidebar, which is why this tool checks the ring against the background colour you specify — or against the backgrounds already in your token schema.',
+        ],
+      },
+      {
+        heading: 'Why use a two-tone (double) focus ring?',
+        body: [
+          'A single-colour ring cannot guarantee 3:1 against every possible background. A dark ring fails on dark surfaces; a light ring fails on light ones.',
+          'The two-tone pattern — a coloured outline with a paper-coloured box-shadow sitting outside it — ensures that one of the two rings always contrasts with whatever is behind it, including photographs where no fixed colour could be guaranteed.',
+        ],
+      },
+      {
+        heading: 'How does this tool read from the token schema?',
+        body: [
+          'The focus-ring generator reads colour primitives from the shared token schema rather than requiring manual hex input. If you have generated a colour ramp with the Color Ramp Generator, those colours appear as presets here.',
+          'The generated focus-ring config is also saved back into the schema, so the CSS export and the token file stay in sync.',
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: 'Is :focus-visible enough, or do I also need :focus?',
+        answer:
+          ':focus-visible is preferred because it only activates on keyboard navigation, not on mouse clicks. Provide a :focus fallback for browsers without :focus-visible support, using @supports not (selector(:focus-visible)).',
+      },
+      {
+        question: 'What offset should a focus ring have?',
+        answer:
+          '2–4px is the practical range. Too close to the element and the ring is hidden by the element\'s own border; too far and the ring appears disconnected. 3px is a safe default.',
+      },
+      {
+        question: 'Does the focus ring need to be visible in Windows High Contrast Mode?',
+        answer:
+          'Yes. outline is respected in High Contrast Mode; box-shadow is not. That is one reason this tool uses outline as the primary ring and box-shadow only for the optional halo.',
+      },
+    ],
+    sources: [
+      {
+        label: 'WCAG 2.2 — Understanding SC 1.4.11 Non-text Contrast',
+        href: 'https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html',
+      },
+      {
+        label: 'WCAG 2.2 — Understanding SC 2.4.7 Focus Visible',
+        href: 'https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html',
+      },
+      {
+        label: 'MDN — :focus-visible',
+        href: 'https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible',
+      },
+    ],
+  },
+
+  {
+    slug: 'dark-mode-flip-previewer',
+    answer:
+      'A dark mode is not an inversion — it is a new set of token values that preserves the semantic intent of the light set. Lightness inversion in OKLCH, with chroma reduced slightly, produces a first-pass dark palette that holds hue and avoids the washed-out or oversaturated results of naive colour inversion.',
+    sections: [
+      {
+        heading: 'Why does simple colour inversion produce bad dark modes?',
+        body: [
+          'Inverting RGB channels flips both lightness and hue. Blue becomes orange, green becomes magenta. The result bears no visual relationship to the light palette.',
+          'Inverting lightness alone in a perceptual colour space (OKLCH) preserves hue and produces a colour that is recognisably the same colour at a different value — which is the entire point of a dark mode.',
+        ],
+      },
+      {
+        heading: 'Why does this tool reduce chroma for dark mode?',
+        body: [
+          'High-chroma colours on a dark background appear to glow or vibrate, a well-documented effect of simultaneous contrast. Reducing chroma by 10–20% counteracts this without desaturating the palette visibly.',
+          'This is the same approach used by Material Design 3 and Apple\'s Human Interface Guidelines for their dark-mode colour generation.',
+        ],
+      },
+      {
+        heading: 'Why does this tool only work on existing tokens?',
+        body: [
+          'Deliberately. The dark-mode generator market is oversaturated with tools that create a palette from scratch. This tool is positioned as "preview my own system in dark mode" — it operates exclusively on tokens already in the shared schema, which is what makes it useful to someone who already has a light palette and needs to validate its dark counterpart.',
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: 'Can I edit the generated dark values?',
+        answer:
+          'Yes. Every dark hex in the table is editable. The tool generates a first pass; fine-tuning by eye is expected and encouraged.',
+      },
+      {
+        question: 'Does this tool handle semantic tokens?',
+        answer:
+          'It flips primitives. Semantic tokens (background, foreground, accent) continue to reference the same primitive keys — only the primitive values change between light and dark. That is the correct architecture for a dark mode.',
+      },
+      {
+        question: 'How do I add tokens to the schema?',
+        answer:
+          'Use the Color Ramp Generator to create a colour ramp, or save individual colours from the Contrast Checker. Any colour primitive in the schema will appear in this tool.',
+      },
+    ],
+    sources: [
+      {
+        label: 'Material Design 3 — Dark theme',
+        href: 'https://m3.material.io/styles/color/dynamic/choosing-a-source',
+      },
+      {
+        label: 'Apple Human Interface Guidelines — Dark Mode',
+        href: 'https://developer.apple.com/design/human-interface-guidelines/dark-mode',
+      },
+    ],
+  },
+
+  {
+    slug: 'empty-state-generator',
+    answer:
+      'An effective empty state names what happened, explains what the user can do, and offers a single clear action. The five common categories are no-data, no-results, error, first-use and permission-denied, each with a different tone and intent.',
+    sections: [
+      {
+        heading: 'What makes a good empty state?',
+        body: [
+          'Three elements: a headline that names the situation without blame, a body that explains what the user can do about it, and a CTA that provides the obvious next step. The icon or illustration is optional but anchors the layout.',
+          'The mistake is treating all five categories the same. "No results" should offer to clear filters; "error" should offer to retry; "first-use" should offer to begin setup. The action is the content.',
+        ],
+      },
+      {
+        heading: 'What are the five empty-state categories?',
+        body: [
+          'No-data: the collection is genuinely empty and the user needs to create the first item. No-results: a search or filter returned nothing and the user needs to broaden it. Error: something failed and the user needs to retry or report.',
+          'First-use: the feature has never been configured and the user needs to complete setup. Permission-denied: the user\'s role does not include this page and they need to request access or contact an admin.',
+        ],
+      },
+      {
+        heading: 'Why does this tool export as a component, not just copy?',
+        body: [
+          'Because empty states recur across an application and should be a reusable component, not copy-pasted prose. The exported Vue or React component accepts headline, body and CTA as props, so each instance can be customised without duplicating the layout.',
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: 'Should empty states have illustrations?',
+        answer:
+          'They can, but a simple icon is usually sufficient and far cheaper to produce. An illustration that does not match the product\'s visual language is worse than no illustration at all.',
+      },
+      {
+        question: 'Can I edit the generated copy?',
+        answer:
+          'Yes. The headline, body and CTA are all editable fields. The generator provides a starting point; the final tone should match the product\'s voice.',
+      },
+      {
+        question: 'Does this tool generate multiple variants?',
+        answer:
+          'Yes, three per category. Use the "Next variant" button to cycle through them. Each variant has a different tone — from straightforward to slightly warmer — so you can pick the register that fits.',
+      },
+    ],
+    sources: [
+      {
+        label: 'Nielsen Norman Group — Empty States',
+        href: 'https://www.nngroup.com/articles/empty-state-interface-design/',
+      },
+      {
+        label: 'Material Design 3 — Communication: Empty states',
+        href: 'https://m3.material.io/foundations/content-design/style-guide/empty-states',
+      },
+    ],
+  },
+  {
+    slug: 'maturity-check',
+    answer:
+      'The Design System Maturity Check is a 24-question self-assessment that scores a design system across four dimensions — documentation, versioning, governance, and adoption — against published maturity models. It runs entirely in the browser, stores nothing on any server, and returns concrete next steps for the level you reached.',
+    sections: [
+      {
+        heading: 'What does it measure?',
+        body: [
+          'Four dimensions, six questions each, weighted by how much each practice load-bears. Documentation covers whether the system is written down and findable. Versioning covers whether consumers know what changed and when. Governance covers who decides, how fast, and whether the process is documented. Adoption covers whether teams actually use the system and whether it tracks itself.',
+          'Options are scored 1–5. The dimension score is the weighted mean of answered questions; the overall score is the unweighted mean of dimension scores. Unanswered questions are excluded, not penalised.',
+        ],
+      },
+      {
+        heading: 'Where do the questions come from?',
+        body: [
+          'Every question cites a published model or standard: Nathan Curtis\'s maturity model, the W3C Design Tokens specification, the Design Tokens Community Group format, or the Vantra governance framework. The sources are shown alongside each question so a team lead who disagrees can trace the criterion back to its origin.',
+        ],
+      },
+      {
+        heading: 'What happens with my answers?',
+        body: [
+          'Nothing leaves the browser. Answers are stored in localStorage under a single key. The share link encodes the answers in the URL fragment — the part after the #, which browsers do not send to any server. There is no analytics, no tracking, and no account.',
+          'You can export the result as Markdown or JSON, copy a share link, or delete everything with one click. The JSON export is designed for diffing: run the check again next quarter and compare the two files to see your trend.',
+        ],
+      },
+    ],
+    table: {
+      caption: 'Maturity levels and score ranges',
+      columns: ['Level', 'Name', 'Score range', 'What it means'],
+      rows: [
+        ['1', 'Initial', '1.00–1.49', 'Practices are informal or absent.'],
+        ['2', 'Managed', '1.50–2.49', 'Practices exist but depend on individual effort.'],
+        ['3', 'Defined', '2.50–3.49', 'Practices are documented and followed consistently.'],
+        ['4', 'Measured', '3.50–4.49', 'Practices are tracked and improved by data.'],
+        ['5', 'Optimised', '4.50–5.00', 'Practices are continuously refined and exemplary.'],
+      ],
+    },
+    faq: [
+      {
+        question: 'Is this an audit?',
+        answer:
+          'No. It is a self-assessment. The score reflects what you report, not what an external review would find. Use it as a starting point for conversation, not as a certificate.',
+      },
+      {
+        question: 'How long does it take?',
+        answer:
+          'About ten minutes. You can skip any question you cannot answer yet — it will not count against you — and return later. Your progress is saved in the browser.',
+      },
+      {
+        question: 'Can I share my result with my team?',
+        answer:
+          'Yes. The share link encodes only the selected options, not free-text notes. Anyone with the link sees the same scores and next steps. Nothing is sent to a server.',
+      },
+      {
+        question: 'How often should I run it?',
+        answer:
+          'Once a quarter is a good cadence. Export the JSON each time and diff the files to see whether scores moved. The next steps update automatically based on the new level.',
+      },
+    ],
+    sources: [
+      {
+        label: 'Nathan Curtis — Measuring Design System Maturity',
+        href: 'https://medium.com/eightshapes-llc/measuring-design-system-success-d0513a93dd96',
+      },
+      {
+        label: 'W3C Design Tokens Format Module',
+        href: 'https://tr.designtokens.org/format/',
+      },
+      {
+        label: 'Design Tokens Community Group',
+        href: 'https://github.com/design-tokens/community-group',
+      },
+    ],
+  },
 ]
 
 export function referenceForTool(slug: string): ToolReferenceEntry | undefined {

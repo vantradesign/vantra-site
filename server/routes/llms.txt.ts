@@ -22,7 +22,7 @@ import { SITE, absoluteUrl } from '~/utils/site'
  * The convention is emerging and not honoured by every crawler yet. It costs one
  * generated route and it is discoverable from robots.txt, which is the whole bet.
  */
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const toolList = tools
     .map((tool) => `- [${tool.name}](${absoluteUrl(`/tools/${tool.slug}`)}): ${tool.summary}`)
     .join('\n')
@@ -31,6 +31,14 @@ export default defineEventHandler((event) => {
     .map(
       (product) =>
         `- [${product.name}](${absoluteUrl(`/work/${product.slug}`)}): ${product.summary} Licence: ${product.license}. Status: ${product.status}.`,
+    )
+    .join('\n')
+
+  const articles = await queryCollection(event, 'journal').all()
+  const journalList = articles
+    .map(
+      (article) =>
+        `- [${article.title}](${absoluteUrl(article.path)}): ${article.description}`,
     )
     .join('\n')
 
@@ -50,6 +58,12 @@ ${toolList}
 
 ${productList}
 
+## Journal
+
+Build notes, decisions and reasoning from the making of Vantra's tools.
+
+${journalList}
+
 ## About and method
 
 - [How it works](${absoluteUrl('/how-it-works')}): How Vantra is put together — what @vantra-design/core parses, why every tool builds on it, and how governance, tools and contribution fit around it.
@@ -59,7 +73,6 @@ ${productList}
 
 ## Optional
 
-- [Journal](${absoluteUrl('/journal')}): Build notes. Opens with the first release; currently a stub.
 - [Privacy](${absoluteUrl('/privacy')}): What this website collects, and what Vantra's tools collect.
 - [Imprint](${absoluteUrl('/imprint')}): Legal disclosure and operator identity.
 

@@ -11,7 +11,7 @@ import { absoluteUrl } from '~/utils/site'
 usePageSeo({
   title: 'Tools',
   description:
-    'Eleven free browser tools: WCAG contrast, type and spacing scales, CSS clamp(), grid and flex, easing curves, unit conversion. Nothing leaves the browser.',
+    'Eighteen free browser tools: WCAG contrast, type and spacing scales, CSS clamp(), grid and flex, easing curves, colour ramps, z-index planning, breakpoints, icon grids, focus rings, dark-mode preview and empty-state copy. Nothing leaves the browser.',
   pageType: 'CollectionPage',
   breadcrumb: [{ name: 'Tools', path: '/tools' }],
   schema: [
@@ -35,14 +35,14 @@ useScrollReveal(root)
     <section class="gutter pt-16 md:pt-24">
       <p class="caption">Tools</p>
       <h1 class="mt-8 font-display text-cover max-w-[24ch] text-balance">
-        Eleven small instruments for the decisions you make every day.
+        Eighteen small instruments for the decisions you make every day.
       </h1>
 
       <div class="mt-12 md:grid md:grid-cols-12 md:gap-x-8">
         <p class="md:col-span-6 md:col-start-5 text-lead measure text-ink-muted">
-          Contrast ratios, type scales, easing curves. The unglamorous arithmetic behind a design
-          system, done properly and done in the browser. Nothing is uploaded, nothing is stored, and
-          every result is one click from your clipboard.
+          Contrast ratios, type scales, colour ramps, z-index plans, breakpoints. The unglamorous
+          arithmetic behind a design system, done properly and done in the browser. Nothing is
+          uploaded, nothing is stored, and every result is one click from your clipboard.
         </p>
       </div>
     </section>

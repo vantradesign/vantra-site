@@ -1,4 +1,5 @@
 import tailwindcss from '@tailwindcss/vite'
+import { designSystemCatalog } from '@vantra-design/maturity-core'
 import { toolRoutes } from './data/tools'
 
 export default defineNuxtConfig({
@@ -10,7 +11,7 @@ export default defineNuxtConfig({
   // below — no route, component or composable has to be rewritten.
   ssr: true,
 
-  modules: ['@nuxt/image', '@nuxt/fonts'],
+  modules: ['@nuxt/content', '@nuxt/image', '@nuxt/fonts'],
 
   css: ['~/assets/css/main.css'],
 
@@ -71,6 +72,10 @@ export default defineNuxtConfig({
         '/imprint',
         '/tools',
         ...toolRoutes,
+        // Maturity check sub-pages (wizard steps + result) are not auto-discovered
+        // from toolRoutes because they live under a nested directory structure.
+        '/tools/maturity-check/result',
+        ...designSystemCatalog.categories.map((c) => `/tools/maturity-check/check/${c.id}`),
         // [SEO] The three crawler-facing files are Nitro routes
         // (server/routes/), not static files in public/, so their contents are
         // generated from data/ and cannot drift from the real route list. They

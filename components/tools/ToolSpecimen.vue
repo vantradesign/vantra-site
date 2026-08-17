@@ -185,5 +185,121 @@ const stackSteps = [4, 6, 9, 13, 19, 27]
       <circle cx="32" cy="70" r="2.5" class="fill-ink" />
       <circle cx="68" cy="34" r="2.5" class="fill-ink" />
     </g>
+
+    <!-- Colour: an OKLCH spectrum, eleven steps fanning from dark to light. -->
+    <g v-else-if="props.specimen === 'spectrum'" class="fill-ink">
+      <rect
+        v-for="i in 11"
+        :key="`sp-${i}`"
+        :x="4 + (i - 1) * 8.4"
+        y="24"
+        width="6.5"
+        height="52"
+        :opacity="0.06 + i * 0.085"
+      />
+      <line x1="4" y1="82" x2="96" y2="82" :style="{ stroke: accentColor }" stroke-width="1.25" />
+    </g>
+
+    <!-- Layout: stacked translucent layers for z-index. -->
+    <g v-else-if="props.specimen === 'layers'">
+      <rect x="14" y="58" width="54" height="22" class="fill-ink" opacity="0.15" />
+      <rect x="22" y="44" width="54" height="22" class="fill-ink" opacity="0.30" />
+      <rect x="30" y="30" width="54" height="22" class="fill-ink" opacity="0.50" />
+      <rect
+        x="38"
+        y="16"
+        width="54"
+        height="22"
+        fill="none"
+        :style="{ stroke: accentColor }"
+        stroke-width="2"
+      />
+    </g>
+
+    <!-- Layout: three device frames at different widths. -->
+    <g
+      v-else-if="props.specimen === 'devices'"
+      fill="none"
+      class="stroke-ink"
+      stroke-width="1.25"
+    >
+      <rect x="8" y="28" width="18" height="56" rx="2" opacity="0.35" />
+      <rect x="32" y="22" width="30" height="56" rx="2" opacity="0.55" />
+      <rect
+        x="68"
+        y="16"
+        width="26"
+        height="56"
+        rx="2"
+        :style="{ stroke: accentColor }"
+      />
+    </g>
+
+    <!-- Assets: a keyline grid with an icon shape inside. -->
+    <g v-else-if="props.specimen === 'keyline'">
+      <rect x="20" y="20" width="60" height="60" fill="none" class="stroke-ink" stroke-width="1" opacity="0.2" />
+      <line x1="50" y1="20" x2="50" y2="80" class="stroke-ink" stroke-width="1" opacity="0.15" />
+      <line x1="20" y1="50" x2="80" y2="50" class="stroke-ink" stroke-width="1" opacity="0.15" />
+      <circle cx="50" cy="50" r="22" fill="none" class="stroke-ink" stroke-width="1" opacity="0.2" />
+      <polygon
+        points="50,30 38,58 62,58"
+        fill="none"
+        :style="{ stroke: accentColor }"
+        stroke-width="2"
+        stroke-linejoin="round"
+      />
+    </g>
+
+    <!-- Colour: concentric focus rings around a control. -->
+    <g v-else-if="props.specimen === 'ring'">
+      <rect x="30" y="38" width="40" height="24" rx="4" class="fill-ink" opacity="0.20" />
+      <rect
+        x="26"
+        y="34"
+        width="48"
+        height="32"
+        rx="6"
+        fill="none"
+        :style="{ stroke: accentColor }"
+        stroke-width="2.5"
+      />
+      <rect x="22" y="30" width="56" height="40" rx="8" fill="none" class="stroke-ink" stroke-width="1" opacity="0.25" />
+    </g>
+
+    <!-- Colour: light/dark split preview. -->
+    <g v-else-if="props.specimen === 'flip'">
+      <rect x="10" y="20" width="38" height="60" class="fill-ink" opacity="0.08" />
+      <rect x="14" y="30" width="30" height="6" class="fill-ink" opacity="0.40" />
+      <rect x="14" y="40" width="22" height="4" class="fill-ink" opacity="0.25" />
+      <rect x="52" y="20" width="38" height="60" class="fill-ink" />
+      <rect x="56" y="30" width="30" height="6" :style="{ fill: accentColor }" />
+      <rect x="56" y="40" width="22" height="4" fill="white" opacity="0.35" />
+      <line x1="50" y1="16" x2="50" y2="84" class="stroke-ink" stroke-width="1" opacity="0.35" />
+    </g>
+
+    <!-- Content: empty-state layout (icon + lines). -->
+    <g v-else-if="props.specimen === 'placeholder'">
+      <circle cx="50" cy="34" r="10" fill="none" :style="{ stroke: accentColor }" stroke-width="2" />
+      <line x1="50" y1="28" x2="50" y2="40" :style="{ stroke: accentColor }" stroke-width="2" />
+      <circle cx="50" cy="42" r="1" :style="{ fill: accentColor }" />
+      <rect x="28" y="54" width="44" height="5" class="fill-ink" opacity="0.30" />
+      <rect x="34" y="63" width="32" height="4" class="fill-ink" opacity="0.18" />
+      <rect x="38" y="74" width="24" height="7" rx="2" fill="none" class="stroke-ink" stroke-width="1" opacity="0.35" />
+    </g>
+
+    <!-- Governance: a four-axis radar chart with a polygon. -->
+    <g v-else-if="props.specimen === 'radar'">
+      <polygon points="50,18 82,50 50,82 18,50" fill="none" class="stroke-ink" stroke-width="1" opacity="0.2" />
+      <polygon points="50,30 70,50 50,70 30,50" fill="none" class="stroke-ink" stroke-width="1" opacity="0.15" />
+      <line x1="50" y1="18" x2="50" y2="82" class="stroke-ink" stroke-width="1" opacity="0.15" />
+      <line x1="18" y1="50" x2="82" y2="50" class="stroke-ink" stroke-width="1" opacity="0.15" />
+      <polygon
+        points="50,24 74,50 50,68 26,50"
+        fill="none"
+        :style="{ stroke: accentColor }"
+        stroke-width="2"
+        stroke-linejoin="round"
+      />
+    </g>
   </svg>
 </template>

@@ -25,8 +25,13 @@ function escapeXml(value: string): string {
     .replace(/'/g, '&apos;')
 }
 
-export default defineEventHandler((event) => {
-  const urls = sitemapRoutes
+export default defineEventHandler(async (event) => {
+  const journalArticles = await queryCollection(event, 'journal').all()
+  const journalPaths = journalArticles.map((a) => a.path)
+
+  const allRoutes = [...sitemapRoutes, ...journalPaths]
+
+  const urls = allRoutes
     .map((route) => `  <url><loc>${escapeXml(absoluteUrl(route))}</loc></url>`)
     .join('\n')
 

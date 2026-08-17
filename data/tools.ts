@@ -14,6 +14,14 @@ export type ToolSpecimen =
   | 'card'
   | 'fluid'
   | 'regions'
+  | 'radar'
+  | 'spectrum'
+  | 'layers'
+  | 'devices'
+  | 'keyline'
+  | 'ring'
+  | 'flip'
+  | 'placeholder'
 
 export interface ToolEntry {
   slug: string
@@ -22,7 +30,7 @@ export interface ToolEntry {
   /** One factual line, reused as the route's meta description. */
   summary: string
   /** Editorial category shown in the index rail. */
-  discipline: 'Colour' | 'Type' | 'Layout' | 'Motion' | 'Units'
+  discipline: 'Colour' | 'Type' | 'Layout' | 'Motion' | 'Units' | 'Governance' | 'Assets' | 'Content'
   specimen: ToolSpecimen
 }
 
@@ -116,6 +124,78 @@ export const tools: ToolEntry[] = [
       'A visual grid and flex builder with subgrid, emitting plain CSS or Tailwind v4 classes.',
     discipline: 'Layout',
     specimen: 'regions',
+  },
+  {
+    slug: 'color-ramp-generator',
+    index: '12',
+    name: 'Color Ramp Generator',
+    summary:
+      'An OKLCH ramp from one brand colour, saved into the shared token schema with contrast metadata.',
+    discipline: 'Colour',
+    specimen: 'spectrum',
+  },
+  {
+    slug: 'z-index-planer',
+    index: '13',
+    name: 'Z-Index Planer',
+    summary:
+      'A documented, conflict-free z-index scale as named tokens, not arbitrary numbers.',
+    discipline: 'Layout',
+    specimen: 'layers',
+  },
+  {
+    slug: 'breakpoint-planer',
+    index: '14',
+    name: 'Breakpoint Planer',
+    summary:
+      'Responsive breakpoint tokens with a live device-frame preview of how the layout reflows.',
+    discipline: 'Layout',
+    specimen: 'devices',
+  },
+  {
+    slug: 'icon-grid-checker',
+    index: '15',
+    name: 'Icon Grid Checker',
+    summary:
+      'Check SVG icons against a keyline grid for stroke-width, viewBox and optical consistency.',
+    discipline: 'Assets',
+    specimen: 'keyline',
+  },
+  {
+    slug: 'focus-ring-generator',
+    index: '16',
+    name: 'Focus Ring Generator',
+    summary:
+      'Accessible focus-ring styles from your token schema colours, contrast-checked on the spot.',
+    discipline: 'Colour',
+    specimen: 'ring',
+  },
+  {
+    slug: 'dark-mode-flip-previewer',
+    index: '17',
+    name: 'Dark Mode Flip Previewer',
+    summary:
+      'Preview your own light-mode tokens flipped to dark, with contrast validation per pair.',
+    discipline: 'Colour',
+    specimen: 'flip',
+  },
+  {
+    slug: 'empty-state-generator',
+    index: '18',
+    name: 'Empty State Generator',
+    summary:
+      'Microcopy and layout templates for empty states — no-data, error, first-use — as editable component snippets.',
+    discipline: 'Content',
+    specimen: 'placeholder',
+  },
+  {
+    slug: 'maturity-check',
+    index: '19',
+    name: 'Design System Maturity Check',
+    summary:
+      'A 24-question self-assessment across documentation, versioning, governance and adoption. Scores four dimensions and returns next steps for the level you reached.',
+    discipline: 'Governance',
+    specimen: 'radar',
   },
 ]
 

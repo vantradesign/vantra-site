@@ -20,7 +20,6 @@ interface NavItem {
 }
 
 const toolsByDiscipline: Record<string, NavLink[]> = {}
-const disciplineOrder = ['Colour', 'Type', 'Layout', 'Motion', 'Units']
 
 for (const tool of tools) {
   ;(toolsByDiscipline[tool.discipline] ??= []).push({
@@ -28,6 +27,25 @@ for (const tool of tools) {
     to: `/tools/${tool.slug}`,
   })
 }
+
+/**
+ * Four balanced columns for the tools mega-menu. Related small disciplines
+ * share a column so nothing gets a lonely single-item strip.
+ */
+const toolColumns: NavGroup[][] = [
+  [{ heading: 'Colour', links: toolsByDiscipline['Colour'] ?? [] }],
+  [{ heading: 'Layout', links: toolsByDiscipline['Layout'] ?? [] }],
+  [
+    { heading: 'Type', links: toolsByDiscipline['Type'] ?? [] },
+    { heading: 'Governance', links: toolsByDiscipline['Governance'] ?? [] },
+    { heading: 'Assets', links: toolsByDiscipline['Assets'] ?? [] },
+  ],
+  [
+    { heading: 'Units', links: toolsByDiscipline['Units'] ?? [] },
+    { heading: 'Motion', links: toolsByDiscipline['Motion'] ?? [] },
+    { heading: 'Content', links: toolsByDiscipline['Content'] ?? [] },
+  ],
+]
 
 const STATUS_LABEL: Record<Product['status'], string> = {
   available: 'Available',
@@ -52,12 +70,7 @@ const nav: NavItem[] = [
   {
     label: 'Tools',
     to: '/tools',
-    children: disciplineOrder
-      .filter((d) => d in toolsByDiscipline)
-      .map((d) => ({
-        heading: d,
-        links: toolsByDiscipline[d],
-      })),
+    children: toolColumns.flat(),
   },
   { label: 'How it works', to: '/how-it-works' },
   { label: 'Journal', to: '/journal' },
@@ -140,11 +153,11 @@ watch(() => route.fullPath, close)
         @mouseleave="scheduleClose()"
         @keydown.escape="close()"
       >
-        <div class="gutter py-8 md:py-10">
+        <div>
           <!-- Work panel -->
           <div
             v-if="openDropdown === '/work'"
-            class="md:flex md:divide-x md:divide-rule"
+            class="gutter py-8 md:flex md:py-10 md:divide-x md:divide-rule"
           >
             <div class="md:flex-1 md:pr-8">
               <ul class="space-y-3">
@@ -187,32 +200,30 @@ watch(() => route.fullPath, close)
           <!-- Tools panel -->
           <div
             v-if="openDropdown === '/tools'"
-            class="flex flex-col gap-6 md:flex-row md:gap-0 md:divide-x md:divide-rule"
+            class="border-t border-rule"
           >
-            <div
-              v-for="(d, i) in disciplineOrder"
-              :key="d"
-              :class="[
-                'md:flex-1',
-                i === 0
-                  ? 'md:pr-5'
-                  : i === disciplineOrder.length - 1
-                    ? 'md:pl-5'
-                    : 'md:px-5',
-              ]"
-            >
-              <p class="caption mb-4">{{ d }}</p>
-              <ul class="space-y-2.5">
-                <li v-for="link in toolsByDiscipline[d]" :key="link.to">
-                  <NuxtLink
-                    :to="link.to"
-                    class="block text-ink-muted hover:text-ink transition-colors duration-300 ease-editorial"
-                    @click="close()"
-                  >
-                    {{ link.label }}
-                  </NuxtLink>
-                </li>
-              </ul>
+            <div class="grid md:grid-cols-4">
+              <div
+                v-for="(column, ci) in toolColumns"
+                :key="ci"
+                class="divide-y divide-rule border-b border-rule md:border-b-0"
+                :class="ci > 0 ? 'md:border-l md:border-rule' : ''"
+              >
+                <div v-for="(group, gi) in column" :key="group.heading" class="px-[calc(var(--spacing-gutter)*0.65)]" :class="[gi === 0 ? 'pt-6 md:pt-8' : 'pt-5', gi === column.length - 1 ? 'pb-6 md:pb-8' : 'pb-5']">
+                  <p class="caption mb-3">{{ group.heading }}</p>
+                  <ul class="space-y-2">
+                    <li v-for="link in group.links" :key="link.to">
+                      <NuxtLink
+                        :to="link.to"
+                        class="block text-ink-muted hover:text-ink transition-colors duration-300 ease-editorial"
+                        @click="close()"
+                      >
+                        {{ link.label }}
+                      </NuxtLink>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>

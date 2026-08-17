@@ -265,6 +265,40 @@ export function faqPageNode(url: string, entries: FaqEntry[]): SchemaNode {
  * explains a formula, that lives in the FAQ and the page prose instead.
  */
 
+/**
+ * A journal article.
+ *
+ * `datePublished` is present because the article page shows the publication
+ * date — every schema field must restate something the visitor can see. `author`
+ * references the Person node already anchored at /about, so an engine resolving
+ * it reaches a page that is about the person rather than a stub.
+ *
+ * This is the first page type on the site that carries a real editorial date,
+ * which is why the webPageNode rule "no datePublished" did not apply here — that
+ * rule referred to pages with no visible date, and journal articles have one.
+ */
+export function articleNode(options: {
+  url: string
+  headline: string
+  description: string
+  datePublished: string
+  dateModified?: string
+}): SchemaNode {
+  return {
+    '@type': 'Article',
+    '@id': `${options.url}#article`,
+    url: options.url,
+    headline: options.headline,
+    description: options.description,
+    inLanguage: SITE.locale,
+    datePublished: options.datePublished,
+    ...(options.dateModified ? { dateModified: options.dateModified } : {}),
+    author: { '@id': PERSON_ID },
+    publisher: { '@id': ORGANIZATION_ID },
+    isPartOf: { '@id': WEBSITE_ID },
+  }
+}
+
 /** An ordered list of URLs, for the /tools and /work index pages. */
 export function itemListNode(
   url: string,
