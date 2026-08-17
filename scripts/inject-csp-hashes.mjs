@@ -22,10 +22,13 @@
  */
 
 import { createHash } from 'node:crypto'
+import { existsSync } from 'node:fs'
 import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-const OUTPUT_DIR = '.output/public'
+// `nuxt generate` writes to .output/public; `nuxt build` with the
+// cloudflare-pages preset writes to dist/. Pick whichever exists.
+const OUTPUT_DIR = existsSync('dist/_headers') ? 'dist' : '.output/public'
 const HEADERS_FILE = join(OUTPUT_DIR, '_headers')
 
 /** Inline <script> blocks: no src attribute, and not a JSON data block. */
