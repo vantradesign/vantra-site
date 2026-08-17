@@ -25,7 +25,7 @@
     "better-sqlite3": "^12.5.0",
     "nuxt": "^3.15.0",
     "vue": "^3.5.13",
-    "@vantra-design/maturity-core": "file:../vantra-maturity-check/packages/core",
+    "@vantra-design/maturity-core": "^0.1.0",
     "vue-router": "^4.5.0",
     "zod": "^3.24.1"
   },
