@@ -44,6 +44,7 @@ const toolColumns: NavGroup[][] = [
     { heading: 'Units', links: toolsByDiscipline['Units'] ?? [] },
     { heading: 'Motion', links: toolsByDiscipline['Motion'] ?? [] },
     { heading: 'Content', links: toolsByDiscipline['Content'] ?? [] },
+    { heading: 'Accessibility', links: toolsByDiscipline['Accessibility'] ?? [] },
   ],
 ]
 

@@ -35,6 +35,7 @@ const CATEGORY_BY_DISCIPLINE = {
   Governance: 'DesignApplication',
   Assets: 'DesignApplication',
   Content: 'DesignApplication',
+  Accessibility: 'DesignApplication',
 } as const
 
 export function useToolPageSeo(options: {

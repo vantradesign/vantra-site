@@ -22,6 +22,7 @@ export type ToolSpecimen =
   | 'ring'
   | 'flip'
   | 'placeholder'
+  | 'transcript'
 
 export interface ToolEntry {
   slug: string
@@ -30,7 +31,7 @@ export interface ToolEntry {
   /** One factual line, reused as the route's meta description. */
   summary: string
   /** Editorial category shown in the index rail. */
-  discipline: 'Colour' | 'Type' | 'Layout' | 'Motion' | 'Units' | 'Governance' | 'Assets' | 'Content'
+  discipline: 'Colour' | 'Type' | 'Layout' | 'Motion' | 'Units' | 'Governance' | 'Assets' | 'Content' | 'Accessibility'
   specimen: ToolSpecimen
 }
 
@@ -196,6 +197,15 @@ export const tools: ToolEntry[] = [
       'A 24-question self-assessment across documentation, versioning, governance and adoption. Scores four dimensions and returns next steps for the level you reached.',
     discipline: 'Governance',
     specimen: 'radar',
+  },
+  {
+    slug: 'screenreader-empathy',
+    index: '20',
+    name: 'Screenreader Empathy',
+    summary:
+      'Paste HTML and hear what a screen reader would announce, node by node. Reading order, heading outline, landmark map and deterministic issue flags — nothing leaves the browser.',
+    discipline: 'Accessibility',
+    specimen: 'transcript',
   },
 ]
 

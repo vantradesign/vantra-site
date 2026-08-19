@@ -301,5 +301,19 @@ const stackSteps = [4, 6, 9, 13, 19, 27]
         stroke-linejoin="round"
       />
     </g>
+
+    <!-- Accessibility: a reading-order transcript, five numbered entries. -->
+    <g v-else-if="props.specimen === 'transcript'">
+      <circle cx="16" cy="24" r="2.5" class="fill-ink" opacity="0.30" />
+      <rect x="24" y="22" width="48" height="4" class="fill-ink" opacity="0.20" />
+      <circle cx="16" cy="38" r="2.5" class="fill-ink" opacity="0.40" />
+      <rect x="24" y="36" width="40" height="4" class="fill-ink" opacity="0.30" />
+      <circle cx="16" cy="52" r="2.5" :style="{ fill: accentColor }" />
+      <rect x="24" y="50" width="56" height="4" :style="{ fill: accentColor }" />
+      <circle cx="16" cy="66" r="2.5" class="fill-ink" opacity="0.40" />
+      <rect x="24" y="64" width="36" height="4" class="fill-ink" opacity="0.30" />
+      <circle cx="16" cy="80" r="2.5" class="fill-ink" opacity="0.30" />
+      <rect x="24" y="78" width="28" height="4" class="fill-ink" opacity="0.20" />
+    </g>
   </svg>
 </template>
