@@ -9,9 +9,9 @@ useScrollReveal(root)
 </script>
 
 <template>
-  <section ref="root" class="mt-section border-t border-rule bg-surface py-20 md:py-28">
+  <section ref="root" aria-labelledby="pullquote-heading" class="mt-section border-t border-rule bg-surface py-20 md:py-28">
     <div class="gutter">
-      <h2 v-if="kicker" class="caption mb-12">{{ kicker }}</h2>
+      <h2 v-if="kicker" id="pullquote-heading" class="caption mb-12">{{ kicker }}</h2>
 
       <ul>
         <li

@@ -156,29 +156,90 @@ export const products: Product[] = [
     links: [{ label: 'Follow on GitHub', href: 'https://github.com/vantradesign' }],
   },
   {
-    slug: 'placeholder-05',
-    name: 'TBD',
+    slug: 'ask-design-system',
+    name: 'Ask Design System',
     index: '04',
     accent: 'cyan',
-    coverLine: 'Placeholder for a fifth tool.',
-    summary: 'Details to follow.',
-    status: 'planned',
-    license: 'TBD',
+    coverLine: 'A conversation with your own tokens, on your own machine.',
+    summary:
+      'A local-first AI assistant that answers natural-language questions about your design tokens — with optional voice input and output — entirely in the browser.',
+    status: 'in-development',
+    license: 'Apache-2.0',
     mood: {
-      src: '/editorial/05-placeholder.avif',
-      alt: 'Placeholder image for a forthcoming product.',
+      src: '/editorial/04-ask-design-system-studio.avif',
+      alt: 'A laptop on a desk showing the Ask Design System chat interface answering a question about spacing tokens.',
+      focal: '50% 45%',
       placeholder: true,
     },
-    problem: '',
-    howItWorks: [],
-    media: [],
+    problem:
+      'Design system documentation gets outdated the day it is published. Token files are comprehensive but not searchable in natural language. Cloud-based design system tools — Zeroheight, Supernova, Specify — require accounts and send your data to third-party servers. Solo designers, small teams, and privacy-conscious organisations have no equivalent: they either answer every question manually or accept that knowledge stays trapped in files nobody reads.',
+    howItWorks: [
+      {
+        heading: 'It reads your tokens, not a generic rulebook.',
+        body: 'Pass your design token JSON — DTCG, Style Dictionary, or plain nested format — and the assistant indexes it on load. Every answer is grounded in your actual data, not a generic set of best practices.',
+      },
+      {
+        heading: 'It retrieves before it reasons.',
+        body: 'Each question is embedded and compared against your token chunks by cosine similarity. The top five matches are injected into the language model\u2019s context, so answers cite your tokens by name instead of inventing plausible ones.',
+      },
+      {
+        heading: 'It speaks and listens, if you want it to.',
+        body: 'Voice input transcribes speech into the text field via the Web Speech API. Voice output reads answers aloud through Kokoro TTS. Both are opt-in, and neither requires a network call after the initial model download.',
+      },
+      {
+        heading: 'It never leaves the machine.',
+        body: 'The language model, the embedding model and the TTS model all run in your browser via WebGPU. Your token data is processed in memory and never transmitted. There is no account, no telemetry, and no server to trust.',
+      },
+    ],
+    media: [
+      {
+        kind: 'video',
+        src: '/media/ask-design-system/chat-session.mp4',
+        poster: '/media/ask-design-system/chat-session.avif',
+        alt: 'Screen recording: a question about spacing tokens answered with a streamed response citing token names.',
+        caption: 'A question about spacing, answered from your own token file.',
+        ratio: '16 / 9',
+        placeholder: true,
+      },
+      {
+        kind: 'image',
+        src: '/media/ask-design-system/model-loading.avif',
+        alt: 'The model loading screen showing a progress bar at 72 percent with the note that the download is one-time only.',
+        caption: 'The language model downloads once. After that, it loads in under three seconds.',
+        ratio: '16 / 10',
+        placeholder: true,
+      },
+    ],
     transparency: {
-      automatic: [],
-      manual: [],
-      locality: '',
+      automatic: [
+        'Retrieval-augmented answers grounded in the token data you provided, with the top five matching chunks injected as context.',
+        'Auto-detection of token format — DTCG, Style Dictionary, or plain nested JSON — with no manual configuration.',
+        'Suggested starter questions derived from the token categories present in your schema.',
+      ],
+      manual: [
+        'Whether an answer is correct. The model is small and quantized; it can misread a token name or invent a relationship that does not exist in the data.',
+        'Whether a token value is current. The assistant sees the JSON you passed at initialisation, not a live feed from your repository.',
+        'Whether the token structure is complete. If a category is missing from your JSON, the assistant cannot answer questions about it.',
+      ],
+      locality:
+        'Everything runs in your browser. The only network request is the one-time model download from Hugging Face (~500 MB for the LLM, ~23 MB for the embedding model, ~82 MB for TTS). After that, there is no fetch call — enforceable via Content Security Policy. There is no account, no analytics, and no error reporting to any external service.',
     },
-    roadmap: 'Planned.',
-    links: [],
+    roadmap:
+      'Core and Vue packages in development. The headless class is functional; the Vue component is complete with chat, voice, and model-loading UI. Next: published npm packages and a hosted demo for embedding on this site.',
+    links: [
+      {
+        label: 'Source on GitHub',
+        href: 'https://github.com/vantradesign/vantra-ask-design-system',
+      },
+      {
+        label: 'npm (core)',
+        href: 'https://www.npmjs.com/package/@vantra-design/ask-design-system',
+      },
+      {
+        label: 'npm (Vue)',
+        href: 'https://www.npmjs.com/package/@vantra-design/ask-design-system-vue',
+      },
+    ],
   },
   {
     slug: 'design-system-maturity-check',
@@ -273,6 +334,92 @@ export const products: Product[] = [
       {
         label: 'Catalog authoring guide',
         href: 'https://github.com/vantradesign/vantra-maturity-check/blob/main/CONTRIBUTING.md',
+      },
+    ],
+  },
+  {
+    slug: 'screenreader-empathy',
+    name: 'Screenreader Empathy',
+    index: '06',
+    accent: 'blue',
+    coverLine: 'Hear what your page sounds like to a screen reader.',
+    summary:
+      'A local-first empathy tool that walks the reading order of your HTML, plays it back aloud node by node, and flags what is confusing — deterministically, with optional AI commentary.',
+    status: 'in-development',
+    license: 'Apache-2.0',
+    mood: {
+      src: '/editorial/06-screenreader-empathy-studio.avif',
+      alt: 'A laptop showing the Screenreader Empathy transcript panel with highlighted elements and deterministic flags beside a rendered page.',
+      focal: '50% 40%',
+      placeholder: true,
+    },
+    problem:
+      'Sighted developers and designers rarely experience their work the way a screen reader user does. Compliance scanners produce rule violations as a checklist, but they do not convey what it feels like to navigate a page blind. A missing alt attribute is a line item, not a three-second silence where an image should have been described. Actual screen readers are authoritative but have steep learning curves — most designers trying VoiceOver for the first time give up before hearing a single word of their page.',
+    howItWorks: [
+      {
+        heading: 'It walks the reading order, not the source.',
+        body: 'The traversal follows the same sequence a screen reader would: DOM order, resolved roles, computed accessible names, landmark boundaries. The output is a numbered transcript, not a rule report.',
+      },
+      {
+        heading: 'It speaks what it finds.',
+        body: 'Each entry is read aloud the way a screen reader would announce it — role first, then name, with pauses where information is missing. An image without alt text is not a line item; it is a silence you hear.',
+      },
+      {
+        heading: 'It flags without guessing.',
+        body: 'Twelve deterministic flag types — missing accessible names, heading-level skips, generic link text, positive tabindex, and more — are detected by rules, not by a model. They are reproducible and will never hallucinate.',
+      },
+      {
+        heading: 'It explains, if you ask.',
+        body: 'Optional AI commentary describes what a screen reader user would experience at each flagged entry, in plain language. The commentary is clearly labelled, never blended with the deterministic data, and runs locally via WebGPU.',
+      },
+      {
+        heading: 'It runs without a browser, too.',
+        body: 'The headless core entry point has zero runtime dependencies and works with jsdom in Node or CI. No audio, no AI — just the traversal sequence and the flags, usable as a test assertion or a report.',
+      },
+    ],
+    media: [
+      {
+        kind: 'video',
+        src: '/media/screenreader-empathy/playback.mp4',
+        poster: '/media/screenreader-empathy/playback.avif',
+        alt: 'Screen recording: the page is read aloud node by node with the current element highlighted and the transcript scrolling alongside.',
+        caption: 'Playback. Each element is highlighted as it is read, and the transcript follows.',
+        ratio: '16 / 9',
+        placeholder: true,
+      },
+      {
+        kind: 'image',
+        src: '/media/screenreader-empathy/transcript.avif',
+        alt: 'The transcript panel showing a numbered reading order with deterministic flags marked on entries that have issues.',
+        caption: 'The transcript. Flags are rule-based and reproducible — no model involved.',
+        ratio: '16 / 10',
+        placeholder: true,
+      },
+    ],
+    transparency: {
+      automatic: [
+        'The full reading order sequence as a screen reader would traverse it, with computed accessible names and resolved roles.',
+        'Twelve deterministic flag types applied by rules — missing names, heading skips, generic link text, duplicate IDs, and more.',
+        'A page-level summary: landmark count, heading structure, and flag counts by type.',
+      ],
+      manual: [
+        'Whether a missing accessible name matters. Some elements are intentionally unnamed; the tool flags them all.',
+        'Whether the reading order is correct. The tool reports what a screen reader would do, not what it should do — those are different questions.',
+        'Whether the AI commentary is accurate. It is generated by a small local model and may mischaracterise the user experience at a flagged entry.',
+      ],
+      locality:
+        'The deterministic core runs entirely in memory with zero network calls — in the browser or in Node. The browser layer downloads a TTS model (~82 MB) and optionally an LLM (~500 MB) from Hugging Face on first use; both are cached locally. After that, there is no fetch call. There is no account, no analytics, and no telemetry.',
+    },
+    roadmap:
+      'Core package in development with 122 passing tests. The headless analysis function and the TTS playback class are functional. Next: the Vue component for embedding, and a hosted demo for this site.',
+    links: [
+      {
+        label: 'Source on GitHub',
+        href: 'https://github.com/vantradesign/vantra-screenreader-empathy',
+      },
+      {
+        label: 'npm (core + browser)',
+        href: 'https://www.npmjs.com/package/@vantra-design/screenreader-empathy',
       },
     ],
   },

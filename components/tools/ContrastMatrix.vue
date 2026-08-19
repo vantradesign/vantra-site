@@ -42,12 +42,6 @@ function setRole(index: number, role: TokenRole) {
   if (token) token.role = role
 }
 
-const roleOptions: { value: TokenRole; label: string }[] = [
-  { value: 'foreground', label: 'Text' },
-  { value: 'background', label: 'Background' },
-  { value: 'unassigned', label: 'Both' },
-]
-
 // ── Matrix computation ─────────────────────────────────────────────────────
 
 const allPairs = computed(() => generateMatrix(tokensWithRoles.value))
@@ -147,67 +141,17 @@ const resultsTableId = useId()
         Assign each token as text (foreground), background, or both. The matrix below checks every text token against every background token.
       </p>
 
-      <div class="mt-4 overflow-x-auto">
-        <table class="w-full text-[0.875rem]">
-          <thead>
-            <tr class="border-b border-ink text-left">
-              <th scope="col" class="caption py-2 pr-4 font-bold">Swatch</th>
-              <th scope="col" class="caption py-2 pr-4 font-bold">Name</th>
-              <th scope="col" class="caption py-2 pr-4 font-bold">Value</th>
-              <th scope="col" class="caption py-2 font-bold">Role</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(token, index) in tokensWithRoles"
-              :key="`${token.source}-${token.path.join('.')}`"
-              class="border-b border-rule"
-            >
-              <td class="py-2 pr-4">
-                <span
-                  class="inline-block size-5 border border-ink/15"
-                  :style="{ backgroundColor: token.hex }"
-                  :aria-label="`Colour swatch: ${token.hex}`"
-                />
-              </td>
-              <td class="py-2 pr-4 font-bold">
-                {{ token.name }}
-                <span v-if="token.resolvedFrom" class="font-normal text-ink-muted">
-                  → {{ token.resolvedFrom }}
-                </span>
-              </td>
-              <td class="py-2 pr-4 tabular-nums text-ink-muted">{{ token.hex }}</td>
-              <td class="py-2">
-                <span class="inline-flex border border-ink">
-                  <label
-                    v-for="option in roleOptions"
-                    :key="option.value"
-                    class="contents"
-                  >
-                    <input
-                      type="radio"
-                      :name="`role-${index}`"
-                      :value="option.value"
-                      :checked="token.role === option.value"
-                      class="peer sr-only"
-                      @change="setRole(index, option.value)"
-                    />
-                    <span
-                      class="caption flex items-center px-3 py-1 normal-case tracking-normal transition-colors duration-200 ease-editorial peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:-outline-offset-2 peer-focus-visible:outline-blue peer-focus-visible:shadow-[inset_0_0_0_4px_var(--color-paper)]"
-                      :class="
-                        token.role === option.value
-                          ? 'bg-ink text-paper font-bold'
-                          : 'text-ink-muted hover:text-ink'
-                      "
-                    >
-                      {{ option.label }}
-                    </span>
-                  </label>
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <ColorSwatchCard
+          v-for="(token, index) in tokensWithRoles"
+          :key="`${token.source}-${token.path.join('.')}`"
+          :hex="token.hex"
+          :name="token.name"
+          :path="token.path"
+          :resolved-from="token.resolvedFrom"
+          :role="token.role"
+          @update:role="setRole(index, $event)"
+        />
       </div>
     </section>
 

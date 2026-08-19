@@ -20,7 +20,7 @@ useHead({
 
     <SiteHeader />
 
-    <main id="main" class="flex-1">
+    <main id="main" aria-label="Content" class="flex-1">
       <NuxtPage />
     </main>
 

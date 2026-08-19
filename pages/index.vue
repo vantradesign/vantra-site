@@ -93,7 +93,7 @@ const principles = [
 
     <PullQuote kicker="Principles" :principles="principles" />
 
-    <section class="gutter mt-section border-t border-rule pt-8 md:pt-10">
+    <div class="gutter mt-section border-t border-rule pt-8 md:pt-10">
       <div class="md:grid md:grid-cols-12">
         <div class="md:col-span-8 md:col-start-5">
           <p class="font-display text-display text-balance measure-tight">
@@ -105,6 +105,6 @@ const principles = [
           </p>
         </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>

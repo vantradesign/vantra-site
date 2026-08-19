@@ -21,9 +21,9 @@ const offsets = computed(() =>
 </script>
 
 <template>
-  <section class="gutter mt-section border-t border-rule pt-8 md:pt-10">
+  <section aria-labelledby="manifesto-heading" class="gutter mt-section border-t border-rule pt-8 md:pt-10">
     <div class="md:grid md:grid-cols-12">
-      <p v-if="kicker" class="caption md:col-span-2 mb-6 md:mb-0 md:pt-3">{{ kicker }}</p>
+      <h2 v-if="kicker" id="manifesto-heading" class="caption md:col-span-2 mb-6 md:mb-0 md:pt-3">{{ kicker }}</h2>
 
       <!-- No fade-in reveal here: the scroll highlight is the entrance. -->
       <div class="highlight-scroll md:col-span-9 md:col-start-4 space-y-8">

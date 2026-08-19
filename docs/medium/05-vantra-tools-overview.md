@@ -9,7 +9,7 @@
 
 Most design system work is not glamorous. It is contrast ratios, type scales, spacing grids, easing curves, and unit conversions — the arithmetic underneath the system, done over and over, easy to get wrong by eye and tedious to get right by hand.
 
-Vantra currently includes [eleven free browser tools](https://vantra.design/tools) that cover exactly that arithmetic, plus five products that watch design systems at a longer timescale. This article walks through both: a fast overview of every tool, followed by a closer look at the [Contrast Checker](https://vantra.design/tools/contrast-checker) — because it connects most directly to Vantra's core mission of accessibility, and because it illustrates the relationship between the quick-answer utilities and the longer-running products.
+Vantra currently includes [eleven free browser tools](https://vantra.design/tools) that cover exactly that arithmetic, plus seven products that watch design systems at a longer timescale or make them more accessible. This article walks through both: a fast overview of every tool, followed by a closer look at the [Contrast Checker](https://vantra.design/tools/contrast-checker) — because it connects most directly to Vantra's core mission of accessibility, and because it illustrates the relationship between the quick-answer utilities and the longer-running products.
 
 ## What tools does Vantra include?
 
@@ -33,9 +33,9 @@ The set is not random. It covers the arithmetic that sits underneath a design sy
 
 ## What about the larger products?
 
-Beyond the utilities, Vantra includes five products that work at a longer timescale. The [Accessibility Auto-Fixer](https://vantra.design/work/accessibility-auto-fixer) finds contrast and ARIA failures on a rendered page and proposes fixes as diffs. The AI Design Reviewer compares a component against the design system it claims to belong to. The Deprecation Lifecycle Orchestrator tracks a removal from announcement to the last consumer. The [Design System Maturity Check](https://vantra.design/work/design-system-maturity-check) scores documentation, versioning, governance and adoption across 24 questions and returns next steps.
+Beyond the utilities, Vantra includes seven products that work at a longer timescale. The [Accessibility Auto-Fixer](https://vantra.design/work/accessibility-auto-fixer) finds contrast and ARIA failures on a rendered page and proposes fixes as diffs. The AI Design Reviewer compares a component against the design system it claims to belong to. The Deprecation Lifecycle Orchestrator tracks a removal from announcement to the last consumer. The [Ask Design System](https://vantra.design/work/ask-design-system) is a local-first AI assistant that answers natural-language questions about your design tokens — with optional voice input and output — entirely in the browser. The [Screenreader Empathy](https://vantra.design/work/screenreader-empathy) tool walks the reading order of your HTML, plays it back aloud node by node, and flags what is confusing — deterministically, with optional AI commentary. The [Design System Maturity Check](https://vantra.design/work/design-system-maturity-check) scores documentation, versioning, governance and adoption across 24 questions and returns next steps.
 
-These are different from the utilities in one important way: they are not quick-answer tools. They watch a system, or assess it, or track a change through its lifecycle. Most of them read your repository through [Vantra Core](https://vantra.design/how-it-works), which is why their findings cite your specific tokens and components rather than checking against a generic set of rules.
+These are different from the utilities in one important way: they are not quick-answer tools. They watch a system, assess it, make it searchable, or let you experience it as a screen reader user would. Most of them read your repository or your tokens through [Vantra Core](https://vantra.design/how-it-works) or a local inference model, which is why their findings cite your specific data rather than checking against a generic set of rules.
 
 ## The Contrast Checker: what it calculates
 

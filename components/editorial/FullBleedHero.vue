@@ -14,7 +14,7 @@ withDefaults(
 </script>
 
 <template>
-  <section class="relative">
+  <div class="relative">
     <div class="relative h-[78svh] min-h-[30rem] overflow-hidden">
       <MoodImage :image="image" :priority="priority" sizes="100vw" />
 
@@ -34,5 +34,5 @@ withDefaults(
     <div v-if="caption" class="gutter pt-5">
       <EditorialCaption :text="caption" />
     </div>
-  </section>
+  </div>
 </template>
