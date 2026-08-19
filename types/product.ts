@@ -39,6 +39,8 @@ export interface Product {
   slug: string
   /** Short name used in navigation and the /work index. */
   name: string
+  /** Hidden from all listings and navigation but kept in the source. */
+  draft?: boolean
   /** Magazine cover line. Sentence case, ends in a full stop. */
   coverLine: string
   /** One line, factual, used under the hero and in meta description. */

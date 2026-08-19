@@ -16,9 +16,9 @@ const consumers = [
     to: '/work/ai-design-reviewer',
   },
   {
-    name: 'Deprecation Lifecycle Orchestrator',
-    takes: 'the same graph, to answer who breaks if this is removed today',
-    to: '/work/deprecation-lifecycle-orchestrator',
+    name: 'Screenreader Empathy',
+    takes: 'the DOM reading order, to walk a page the way a screen reader would',
+    to: '/work/screenreader-empathy',
   },
   {
     name: 'Governance Suite',
