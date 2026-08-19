@@ -39,9 +39,16 @@ const ORIGIN = 'https://vantra.design'
  * failure, and anything on this list *without* one is also a failure — the list
  * has to be wrong in only one direction to be useless.
  *
- * Keep in sync with EXCLUDED_FROM_SITEMAP in data/routes.ts.
+ * Keep in sync with EXCLUDED_FROM_SITEMAP in data/routes.ts and any page that
+ * passes `noindex: true` to usePageSeo().
  */
-const EXPECTED_NOINDEX = new Set(['/journal'])
+const EXPECTED_NOINDEX = new Set([
+  '/tools/maturity-check/check/adoption',
+  '/tools/maturity-check/check/documentation',
+  '/tools/maturity-check/check/governance',
+  '/tools/maturity-check/check/versioning',
+  '/tools/maturity-check/result',
+])
 
 const failures = []
 const warnings = []
