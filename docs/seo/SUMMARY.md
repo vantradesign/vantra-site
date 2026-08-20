@@ -44,7 +44,7 @@ The brief's Phase 2 collided with a documented convention: `README.md` and
 characters. Rather than override that silently, the fix adds a **second register**
 below each tool instead of rewriting the first.
 
-Eleven tool pages gained an answer block (self-contained, under ~45 words),
+Twenty tool pages gained an answer block (self-contained, under ~45 words),
 question-led `<h3>`s, comparison tables where the page had none, a 3–5 item FAQ,
 and 2–3 cited primary sources — MDN, W3C specs, WCAG understanding documents.
 `/tools/clamp-calculator` previously did not contain the word "formula"; it now

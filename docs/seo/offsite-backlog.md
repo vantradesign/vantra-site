@@ -42,7 +42,7 @@ because they are structured and heavily crawled.
 | # | Action | Why it matters | Effort |
 | --- | --- | --- | --- |
 | 1.1 | **Fill out every `vantradesign` GitHub repo**: description, topics, and a README that names the hosted tool and links to its page. | GitHub is in every major model's training corpus and is crawled constantly. A repo with topics `css`, `clamp`, `fluid-typography`, `design-tokens`, `wcag` is a citation-grade entity description you wrote yourself. Currently several repos link only to the org root. | Low |
-| 1.2 | **Add a `## Tools` section to the org profile README** (`.github/profile/README.md`) linking all eleven tools by name. | The org profile is the canonical landing page for the GitHub entity and is the first thing a model resolves from a `github.com/vantradesign` mention. | Low — the file is already open in this workspace |
+| 1.2 | **Add a `## Tools` section to the org profile README** (`.github/profile/README.md`) linking all twenty tools by name. | The org profile is the canonical landing page for the GitHub entity and is the first thing a model resolves from a `github.com/vantradesign` mention. | Low — the file is already open in this workspace |
 | 1.3 | **Publish `@vantra-design/core` to npm** if not already public, with a complete `package.json` description, keywords and `homepage`. | npm package pages rank well and are a strong entity signal. `homepage` pointing at `vantra.design` is a first-party link from a high-authority domain. | Low |
 | 1.4 | **Submit the sitemap in Google Search Console and Bing Webmaster Tools.** | Nothing above matters until the sitemap is submitted. Bing matters disproportionately here: it is the index behind ChatGPT search and Copilot. | Low — 15 minutes, do this first |
 
@@ -87,7 +87,7 @@ is weighted more heavily in generative retrieval than in classic ranking.
 | Surface | Cadence | What to actually do |
 | --- | --- | --- |
 | The four priority tool pages (`clamp-calculator`, `layout-builder`, `type-scale`, `contrast-checker`) | **Quarterly** | Re-check the reference layer against the current spec and browser support. Add any question that has started appearing in search or in support mail. Verify every source URL still resolves. |
-| Remaining seven tool pages | **Every 6 months** | Same, lighter. |
+| Remaining sixteen tool pages | **Every 6 months** | Same, lighter. |
 | `llms.txt` and the sitemap | **Automatic** | Both generate from `data/`. No maintenance — this is why they were built that way. |
 | Browser-support claims in `data/tool-reference.ts` | **Quarterly, with the priority pages** | Specific claims exist about clamp() support and subgrid ship dates. These age. They are the most likely thing in this repo to become quietly false. |
 | `/journal` | **On first post** | Remove the `noindex` in `pages/journal/index.vue` and the `/journal` entry in `EXCLUDED_FROM_SITEMAP` (`data/routes.ts`), in the same commit. |
@@ -109,5 +109,5 @@ Recorded because each is commonly recommended and each would cause real damage.
 - **Do not add `FAQPage` markup for questions not visible on the page.** The
   implementation makes this structurally impossible, and it should stay that way.
 - **Do not chase every keyword with a new thin page.** The audit consolidated
-  toward deeper pages deliberately. Eleven strong tool pages beat forty weak ones,
+  toward deeper pages deliberately. Twenty strong tool pages beat forty weak ones,
   for both classic ranking and citation.

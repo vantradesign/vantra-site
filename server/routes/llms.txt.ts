@@ -9,7 +9,7 @@ import { SITE, absoluteUrl } from '~/utils/site'
  * factual one-liner.
  *
  * What this is for: an answer engine that has decided to read this site should
- * not have to infer its shape from eleven separate tool pages. It should be able
+ * not have to infer its shape from twenty separate tool pages. It should be able
  * to read one file, know which URL answers which question, and cite that URL.
  *
  * What this is not: a place to say anything the pages do not say. Every
@@ -68,7 +68,7 @@ ${journalList}
 
 - [How it works](${absoluteUrl('/how-it-works')}): How Vantra is put together — what @vantra-design/core parses, why every tool builds on it, and how governance, tools and contribution fit around it.
 - [About](${absoluteUrl('/about')}): What Vantra is, and the principles the tools are built on.
-- [Tools index](${absoluteUrl('/tools')}): All eleven browser tools in one list, grouped by discipline.
+- [Tools index](${absoluteUrl('/tools')}): All twenty browser tools in one list, grouped by discipline.
 - [Work index](${absoluteUrl('/work')}): All products in one list.
 
 ## Optional

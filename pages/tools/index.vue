@@ -11,7 +11,7 @@ import { absoluteUrl } from '~/utils/site'
 usePageSeo({
   title: 'Tools',
   description:
-    'Eighteen free browser tools: WCAG contrast, type and spacing scales, CSS clamp(), grid and flex, easing curves, colour ramps, z-index planning, breakpoints, icon grids, focus rings, dark-mode preview and empty-state copy. Nothing leaves the browser.',
+    'Twenty free browser tools: WCAG contrast, type and spacing scales, CSS clamp(), grid and flex, easing curves, colour ramps, z-index planning, breakpoints, icon grids, focus rings, dark-mode preview, empty-state copy, design-system maturity and screenreader empathy. Nothing leaves the browser.',
   pageType: 'CollectionPage',
   breadcrumb: [{ name: 'Tools', path: '/tools' }],
   schema: [
@@ -35,7 +35,7 @@ useScrollReveal(root)
     <section class="gutter pt-16 md:pt-24">
       <p class="caption">Tools</p>
       <h1 class="mt-8 font-display text-cover max-w-[24ch] text-balance">
-        Eighteen small instruments for the decisions you make every day.
+        Twenty small instruments for the decisions you make every day.
       </h1>
 
       <div class="mt-12 md:grid md:grid-cols-12 md:gap-x-8">

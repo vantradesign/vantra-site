@@ -79,7 +79,7 @@ changed above the reference block.
 | `/tools/aspect-ratio` | Calculator, preview, **existing** 8-row reference table. | Plus: answer block, 3 sections, 3 FAQs, 2 sources. **No table added** — the page already has one, and duplicating it would put the same rows on one URL twice. |
 | `/tools/spacing-scale`, `/tools/unit-converter`, `/tools/easing-curves`, `/tools/shade-tint-generator`, `/tools/shadow-playground`, `/tools/font-pairing` | Tool plus editorial framing. | Same pattern. Tables where the page had none (spacing multipliers, px/rem/em/pt conversions, easing keyword equivalents); no table where a table would be padding. |
 
-All eleven tool pages also gained, via `useToolPageSeo()`: a self-referencing
+All twenty tool pages also gained, via `useToolPageSeo()`: a self-referencing
 canonical, full Open Graph and Twitter tags, a `BreadcrumbList`, and a
 `WebApplication` node with a `price: '0'` offer.
 

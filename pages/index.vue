@@ -13,7 +13,7 @@ import type { MoodImage } from '~/types/product'
 usePageSeo({
   title: 'Vantra',
   description:
-    'Local-first, open-source tools for accessibility and design systems. Eleven free browser tools for contrast, type scales, fluid CSS and layout.',
+    'Local-first, open-source tools for accessibility and design systems. Twenty free browser tools for contrast, type scales, fluid CSS, layout, governance and accessibility.',
   schema: [
     personNode(),
     itemListNode(

@@ -2,11 +2,11 @@
 import { tools } from '~/data/tools'
 
 /**
- * Chapter three's visual: the eleven utilities set as one typographic plate,
+ * Chapter three's visual: the twenty browser tools set as one typographic plate,
  * grouped by discipline. Names and links only — the index at /tools carries the
  * summaries, and repeating them here would make this page a second index.
  */
-const DISCIPLINE_ORDER = ['Colour', 'Type', 'Layout', 'Motion', 'Units'] as const
+const DISCIPLINE_ORDER = ['Colour', 'Type', 'Layout', 'Motion', 'Units', 'Assets', 'Content', 'Governance', 'Accessibility'] as const
 
 const groups = computed(() =>
   DISCIPLINE_ORDER.map((discipline) => ({
