@@ -15,8 +15,8 @@ withDefaults(
 
 <template>
   <div class="relative">
-    <div class="relative h-[78svh] min-h-[30rem] overflow-hidden">
-      <MoodImage :image="image" :priority="priority" sizes="100vw" />
+    <div class="relative h-[85svh] min-h-[30rem] overflow-hidden">
+      <MoodImage :image="image" :priority="priority" sizes="xs:100vw sm:100vw md:100vw lg:100vw xl:100vw xxl:100vw 3xl:100vw 4xl:100vw" />
 
       <div
         class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-ink/70 via-ink/25 to-transparent"

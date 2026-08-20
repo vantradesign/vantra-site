@@ -61,7 +61,7 @@ usePageSeo({
   schema: productSchema.value,
 })
 
-const supportingMedia = computed(() => product.value?.media.slice(1) ?? [])
+const supportingMedia = computed(() => product.value?.media ?? [])
 </script>
 
 <template>

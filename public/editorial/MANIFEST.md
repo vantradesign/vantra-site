@@ -4,8 +4,9 @@ Every file in this directory is registered below **with the prompt that produced
 it**. This is what keeps the series coherent: entry 07 must look like it was shot
 on the same afternoon as entry 01.
 
-Never use these on `/work/[slug]` pages. Product pages use real captures only
-(see `public/media/MANIFEST.md`).
+Mood images serve as the full-bleed hero on both `/work` index cards and
+`/work/[slug]` detail pages. Real product captures in `public/media/` appear
+as supporting media below the hero (see `public/media/MANIFEST.md`).
 
 ## The locked prompt template
 
@@ -48,7 +49,7 @@ backgrounds, no glossy reflections, no clutter.
 | File | Used on | Subject / scene | Status |
 | --- | --- | --- | --- |
 | `00-opening-spread.avif` | `/` opening spread | Laptop on plaster worktop, Auto-Fixer marking three contrast failures / studio corner, morning light | **placeholder** |
-| `01-auto-fixer-studio.avif` | `/` + `/work` entry 01 | Same laptop, side panel open on the findings list / oak worktop, linen cloth | **placeholder** |
+| `01-auto-fixer-studio.avif` | `/` + `/work` entry 01 | Same laptop, side panel open on the findings list / oak worktop, linen cloth | **live** |
 | `02-design-reviewer-studio.avif` | `/` + `/work` entry 02 | Display showing a component diff, two button variants / studio desk, low daylight | **placeholder** |
 | `03-deprecation-studio.avif` | `/` + `/work` entry 03 | Screen showing a dependency graph, one node marked for removal / folded print-out on linen | **placeholder** |
 | `04-maturity-check-studio.avif` | `/` + `/work` entry 04 | Terminal showing the Maturity Check report, four dimension scores beside their next steps / plaster worktop, morning light | **placeholder** |
