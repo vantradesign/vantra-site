@@ -27,15 +27,17 @@ const props = withDefaults(
     </p>
   </div>
 
-  <NuxtImg
-    v-else
-    :src="props.image.src"
-    :alt="props.image.alt"
-    :sizes="props.sizes"
-    :loading="props.priority ? 'eager' : 'lazy'"
-    :preload="props.priority"
-    :fetchpriority="props.priority ? 'high' : 'auto'"
-    :style="{ objectPosition: props.image.focal ?? '50% 50%' }"
-    class="absolute inset-0 h-full w-full object-cover"
-  />
+  <template v-else>
+    <NuxtImg
+      :src="props.image.src"
+      :alt="props.image.alt"
+      :sizes="props.sizes"
+      :loading="props.priority ? 'eager' : 'lazy'"
+      :preload="props.priority"
+      :fetchpriority="props.priority ? 'high' : 'auto'"
+      :style="{ objectPosition: props.image.focal ?? '50% 50%' }"
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+    <AiBadge />
+  </template>
 </template>
