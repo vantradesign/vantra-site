@@ -15,7 +15,7 @@ const _allProducts: Product[] = [
       src: '/editorial/01-auto-fixer-studio.avif',
       alt: 'A laptop on a plaster worktop in daylight, its screen showing the Accessibility Auto-Fixer panel with three contrast failures marked on a live page.',
       focal: '50% 40%',
-      placeholder: true,
+      placeholder: false,
     },
     problem:
       'Accessibility work fails at the last mile. Audits arrive as spreadsheets weeks after the code shipped, written by a tool that never saw the rendered page. By the time anyone reads them, the component has been reused eleven times. The failures that matter are small, repetitive and entirely fixable — they just need to be found while the page is still on screen.',
@@ -82,7 +82,7 @@ const _allProducts: Product[] = [
         'Everything runs in the extension, on your machine. No page content, URL, screenshot or finding is transmitted anywhere. There is no account to create and no server to trust, which is deliberate: an accessibility tool that reads every page you visit has no business also being a network client.',
     },
     roadmap:
-      'Currently in development. Next: exportable findings as a diffable artefact, so a fix can be reviewed in a pull request rather than in a browser. After that, shared rule configuration so a team audits against one agreed threshold.',
+      'Currently in development. The extension now includes a built-in Empathy tab that runs Screenreader Empathy on the live DOM, with read-aloud playback and configurable voice settings. Next: exportable findings as a diffable artefact, so a fix can be reviewed in a pull request rather than in a browser. After that, shared rule configuration so a team audits against one agreed threshold.',
     links: [
       { label: 'Source on GitHub', href: 'https://github.com/vantradesign' },
       { label: 'Report an issue', href: 'https://github.com/vantradesign' },
@@ -151,7 +151,7 @@ const _allProducts: Product[] = [
       },
       {
         heading: 'It flags without guessing.',
-        body: 'Twelve deterministic flag types — missing accessible names, heading-level skips, generic link text, positive tabindex, and more — are detected by rules, not by a model. They are reproducible and will never hallucinate.',
+        body: 'Twenty-eight deterministic flag types — missing accessible names, heading-level skips, generic link text, landmark nesting violations, orphaned content, and more — are detected by rules, not by a model. They are reproducible and will never hallucinate.',
       },
       {
         heading: 'It explains, if you ask.',
@@ -184,7 +184,7 @@ const _allProducts: Product[] = [
     transparency: {
       automatic: [
         'The full reading order sequence as a screen reader would traverse it, with computed accessible names and resolved roles.',
-        'Twelve deterministic flag types applied by rules — missing names, heading skips, generic link text, duplicate IDs, and more.',
+        'Twenty-eight deterministic flag types applied by rules — missing names, heading skips, generic link text, duplicate IDs, landmark nesting violations, orphaned content, and more.',
         'A page-level summary: landmark count, heading structure, and flag counts by type.',
       ],
       manual: [
@@ -196,7 +196,7 @@ const _allProducts: Product[] = [
         'The deterministic core runs entirely in memory with zero network calls — in the browser or in Node. The browser layer downloads a TTS model (~82 MB) and optionally an LLM (~500 MB) from Hugging Face on first use; both are cached locally. After that, there is no fetch call. There is no account, no analytics, and no telemetry.',
     },
     roadmap:
-      'Core package in development with 122 passing tests. The headless analysis function and the TTS playback class are functional. Next: the Vue component for embedding, and a hosted demo for this site.',
+      'Core package published with 168 passing tests across six test suites. The headless analysis, TTS playback and structure report are stable. The browser extension (Accessibility Auto-Fixer) ships a built-in Empathy tab that runs the analysis on the live DOM and reads the page aloud via Web Speech API. A standalone demo with URL fetching is available for quick audits.',
     links: [
       {
         label: 'Source on GitHub',
