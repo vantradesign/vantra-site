@@ -7,14 +7,14 @@ author:
 datePublished: "2026-08-14"
 lede:
   - "Vantra is heading toward more tools, a deeper Core, and new surfaces — including, likely, Figma plugins. These are honest intentions, not hard commitments. No dates, no \"launching Q3,\" just the direction the work is taking and why."
-  - "The short version: the [eleven browser utilities](/tools) will keep growing, the products that watch systems over time will ship one at a time, and Vantra Core will keep expanding the range of repositories it can read."
+  - "The short version: the [twenty browser tools](/tools) will keep growing, the products that watch systems over time will ship one at a time, and Vantra Core will keep expanding the range of repositories it can read."
 ---
 
 ## Where is the tool suite heading?
 
-The eleven browser utilities — contrast checking, type scales, easing curves, spacing scales, clamp() calculations, grid and flex layouts — are the visible surface of Vantra today. They are free, they run in the browser, and they will stay that way. New utilities will join as the set of questions worth answering grows.
+The twenty browser tools — contrast checking, type scales, easing curves, spacing scales, clamp() calculations, grid and flex layouts, colour ramps, breakpoints, focus rings, icon grids, dark-mode previews, and more — are the visible surface of Vantra today. They are free, they run in the browser, and they will stay that way. New tools will join as the set of questions worth answering grows.
 
-The larger investment is in the products: tools that watch a design system over time rather than answering one question and closing the tab. The [Accessibility Auto-Fixer](/work/accessibility-auto-fixer) reads a rendered page and proposes fixes as diffs. The AI Design Reviewer compares a component against the system it belongs to. The Deprecation Lifecycle Orchestrator follows a removal from announcement to the last consumer. These are slower to build because they are harder to get right — a tool that watches your system continuously has to be trustworthy continuously.
+The larger investment is in the products: tools that watch a design system over time rather than answering one question and closing the tab. The [Accessibility Auto-Fixer](/work/accessibility-auto-fixer) reads a rendered page and proposes fixes as diffs — and now includes a built-in Empathy tab for live screenreader simulation. The AI Design Reviewer compares a component against the system it belongs to. [Screenreader Empathy](/work/screenreader-empathy) walks the reading order and plays it back aloud. These are slower to build because they are harder to get right — a tool that watches your system continuously has to be trustworthy continuously.
 
 ## What is happening with Vantra Core?
 

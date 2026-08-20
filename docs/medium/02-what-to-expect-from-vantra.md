@@ -13,9 +13,9 @@ Here is what the direction actually looks like, and the reasoning behind it.
 
 ## Where is the tool suite heading?
 
-The [eleven browser utilities](https://vantra.design/tools) — contrast checking, type scales, easing curves, spacing scales, clamp() calculations, grid and flex layouts — are the visible surface of Vantra today. They are free, they run in the browser, and they will stay that way. New utilities will join as the set of questions worth answering grows.
+The [twenty browser tools](https://vantra.design/tools) — contrast checking, type scales, easing curves, spacing scales, clamp() calculations, grid and flex layouts, colour ramps, breakpoints, focus rings, icon grids, dark-mode previews, and more — are the visible surface of Vantra today. They are free, they run in the browser, and they will stay that way. New tools will join as the set of questions worth answering grows.
 
-The larger investment is in the products: tools that watch a design system over time rather than answering one question and closing the tab. The [Accessibility Auto-Fixer](https://vantra.design/work/accessibility-auto-fixer) reads a rendered page and proposes fixes as diffs. The AI Design Reviewer compares a component against the system it belongs to. The Deprecation Lifecycle Orchestrator follows a removal from announcement to the last consumer. These are slower to build because they are harder to get right — a tool that watches your system continuously has to be trustworthy continuously.
+The larger investment is in the products: tools that watch a design system over time rather than answering one question and closing the tab. The [Accessibility Auto-Fixer](https://vantra.design/work/accessibility-auto-fixer) reads a rendered page and proposes fixes as diffs — and now includes a built-in Empathy tab for live screenreader simulation. The AI Design Reviewer compares a component against the system it belongs to. [Screenreader Empathy](https://vantra.design/work/screenreader-empathy) walks the reading order and plays it back aloud. These are slower to build because they are harder to get right — a tool that watches your system continuously has to be trustworthy continuously.
 
 ## What is happening with Vantra Core?
 

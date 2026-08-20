@@ -1,7 +1,7 @@
 <!-- CANONICAL URL: https://vantra.design/journal/vantra-tools-overview -->
 <!-- Set this as the canonical URL in Medium's story settings before publishing. -->
 
-# Vantra tools: eleven free utilities and the Contrast Checker up close
+# Vantra tools: twenty free browser tools and the Contrast Checker up close
 
 *Kai Kauper, design systems lead*
 
@@ -9,11 +9,11 @@
 
 Most design system work is not glamorous. It is contrast ratios, type scales, spacing grids, easing curves, and unit conversions — the arithmetic underneath the system, done over and over, easy to get wrong by eye and tedious to get right by hand.
 
-Vantra currently includes [eleven free browser tools](https://vantra.design/tools) that cover exactly that arithmetic, plus seven products that watch design systems at a longer timescale or make them more accessible. This article walks through both: a fast overview of every tool, followed by a closer look at the [Contrast Checker](https://vantra.design/tools/contrast-checker) — because it connects most directly to Vantra's core mission of accessibility, and because it illustrates the relationship between the quick-answer utilities and the longer-running products.
+Vantra currently includes [twenty free browser tools](https://vantra.design/tools) that cover exactly that arithmetic and more, plus five products that watch design systems at a longer timescale or make them more accessible. This article walks through both: a fast overview of every tool, followed by a closer look at the [Contrast Checker](https://vantra.design/tools/contrast-checker) — because it connects most directly to Vantra's core mission of accessibility, and because it illustrates the relationship between the quick-answer utilities and the longer-running products.
 
 ## What tools does Vantra include?
 
-All eleven utilities run in the browser, require no account, and compute everything locally. Nothing is uploaded.
+All twenty tools run in the browser, require no account, and compute everything locally. Nothing is uploaded.
 
 | Tool | Discipline | What it does |
 | --- | --- | --- |
@@ -28,12 +28,21 @@ All eleven utilities run in the browser, require no account, and compute everyth
 | Radius & Shadow Playground | Layout | Layered box-shadow and border-radius, previewed on a real content card. |
 | CSS clamp() Calculator | Units | One fluid value for a one-off size, with a viewport simulator to prove it. |
 | Grid & Flex Builder | Layout | A visual grid and flex builder with subgrid, emitting plain CSS or Tailwind v4 classes. |
+| Color Ramp Generator | Colour | An OKLCH ramp from one brand colour, saved into the shared token schema with contrast metadata. |
+| Z-Index Planer | Layout | A documented, conflict-free z-index scale as named tokens, not arbitrary numbers. |
+| Breakpoint Planer | Layout | Responsive breakpoint tokens with a live device-frame preview of how the layout reflows. |
+| Icon Grid Checker | Assets | Check SVG icons against a keyline grid for stroke-width, viewBox and optical consistency. |
+| Focus Ring Generator | Colour | Accessible focus-ring styles from your token schema colours, contrast-checked on the spot. |
+| Dark Mode Flip Previewer | Colour | Preview your own light-mode tokens flipped to dark, with contrast validation per pair. |
+| Empty State Generator | Content | Microcopy and layout templates for empty states — no-data, error, first-use — as editable component snippets. |
+| Design System Maturity Check | Governance | A 24-question self-assessment across documentation, versioning, governance and adoption. |
+| Screenreader Empathy | Accessibility | Paste HTML and hear what a screen reader would announce, node by node. Reading order, heading outline, landmark map and deterministic issue flags. |
 
-The set is not random. It covers the arithmetic that sits underneath a design system: the contrast ratios, type scales, spacing grids, and motion curves that are boring to calculate by hand and easy to get wrong by eye.
+The set is not random. It covers the arithmetic that sits underneath a design system — the contrast ratios, type scales, spacing grids, and motion curves that are boring to calculate by hand and easy to get wrong by eye — plus governance, icon, content and accessibility tools that go further.
 
 ## What about the larger products?
 
-Beyond the utilities, Vantra includes seven products that work at a longer timescale. The [Accessibility Auto-Fixer](https://vantra.design/work/accessibility-auto-fixer) finds contrast and ARIA failures on a rendered page and proposes fixes as diffs. The AI Design Reviewer compares a component against the design system it claims to belong to. The Deprecation Lifecycle Orchestrator tracks a removal from announcement to the last consumer. The [Ask Design System](https://vantra.design/work/ask-design-system) is a local-first AI assistant that answers natural-language questions about your design tokens — with optional voice input and output — entirely in the browser. The [Screenreader Empathy](https://vantra.design/work/screenreader-empathy) tool walks the reading order of your HTML, plays it back aloud node by node, and flags what is confusing — deterministically, with optional AI commentary. The [Design System Maturity Check](https://vantra.design/work/design-system-maturity-check) scores documentation, versioning, governance and adoption across 24 questions and returns next steps.
+Beyond the utilities, Vantra includes five products that work at a longer timescale. The [Accessibility Auto-Fixer](https://vantra.design/work/accessibility-auto-fixer) finds contrast and ARIA failures on a rendered page and proposes fixes as diffs — and now includes a built-in Empathy tab that runs Screenreader Empathy on the live DOM. The AI Design Reviewer compares a component against the design system it claims to belong to. The [Ask Design System](https://vantra.design/work/ask-design-system) is a local-first AI assistant that answers natural-language questions about your design tokens — with optional voice input and output — entirely in the browser. The [Screenreader Empathy](https://vantra.design/work/screenreader-empathy) tool walks the reading order of your HTML, plays it back aloud node by node, and flags what is confusing — deterministically, with optional AI commentary. The [Design System Maturity Check](https://vantra.design/work/design-system-maturity-check) scores documentation, versioning, governance and adoption across 24 questions and returns next steps.
 
 These are different from the utilities in one important way: they are not quick-answer tools. They watch a system, assess it, make it searchable, or let you experience it as a screen reader user would. Most of them read your repository or your tokens through [Vantra Core](https://vantra.design/how-it-works) or a local inference model, which is why their findings cite your specific data rather than checking against a generic set of rules.
 

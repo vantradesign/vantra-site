@@ -58,7 +58,7 @@ work needed to support journal content on the site.
 | 2 | `what-to-expect-from-vantra` | What to expect from Vantra: direction, not deadlines | Where Vantra is heading: more tools, a deeper Core, and Figma plugins being explored. Honest intent without hard ship dates. |
 | 3 | `design-system-maturity-checker` | Design system maturity: what it means and how to measure it | Design system maturity measures how well a system supports its teams over time. The Vantra Maturity Checker scores four dimensions and returns next steps. |
 | 4 | `what-is-vantra-core` | Vantra Core: the shared foundation underneath every tool | Vantra Core is the shared parser every Vantra tool builds on. It reads tokens and the component graph so each tool starts from the same facts. |
-| 5 | `vantra-tools-overview` | Vantra tools: eleven free utilities and the Contrast Checker up close | All eleven free Vantra browser tools in one list, plus a deep dive on the Contrast Checker — what it calculates and why contrast matters. |
+| 5 | `vantra-tools-overview` | Vantra tools: twenty free browser tools and the Contrast Checker up close | All twenty free Vantra browser tools in one list, plus a deep dive on the Contrast Checker — what it calculates and why contrast matters. |
 
 ---
 
