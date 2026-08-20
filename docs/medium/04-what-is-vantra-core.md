@@ -13,7 +13,7 @@ Vantra Core exists to solve that problem. It is the shared parsing library that 
 
 ## What is Vantra Core?
 
-Vantra Core — published as `@vantra-design/core` — is a TypeScript library with three APIs. `parseComponents()` reads a repository and returns a structured list of every component it finds, with props, exports, and the file they live in. `buildComponentGraph()` turns those components into a dependency graph: who imports whom, who breaks if something changes. `parseTokenSchema()` reads design tokens from CSS custom properties, DTCG JSON, or Style Dictionary files and normalises them into one comparable schema.
+Vantra Core, published as `@vantra-design/core`, is a TypeScript library with three APIs. `parseComponents()` reads a repository and returns a structured list of every component it finds, with props, exports, and the file they live in. `buildComponentGraph()` turns those components into a dependency graph: who imports whom, who breaks if something changes. `parseTokenSchema()` reads design tokens from CSS custom properties, DTCG JSON, or Style Dictionary files and normalises them into one comparable schema.
 
 It has no runtime, no CLI, and no interface of its own. It is a dev dependency that reads your source and returns structured data. Nothing is written back, and nothing is sent anywhere.
 
@@ -27,17 +27,17 @@ Core means they all start from the same reading of your repository. A component 
 
 Three things, mostly invisible until the second tool is installed.
 
-Consistency: every tool references your tokens by the same canonical name and your components by the same file path. Comparability: a finding from the Auto-Fixer and a finding from the Design Reviewer can be correlated because they share identifiers. Speed: adding a new tool does not require writing a new parser — it requires asking a new question of an existing graph.
+Consistency: every tool references your tokens by the same canonical name and your components by the same file path. Comparability: a finding from the Auto-Fixer and a finding from the Design Reviewer can be correlated because they share identifiers. Speed: adding a new tool does not require writing a new parser; it requires asking a new question of an existing graph.
 
 For someone using a single tool, Core is invisible infrastructure. For someone using two or three, it is why the tools feel like instruments in the same workshop rather than products from different vendors.
 
 ## Do I need to understand Core to use the tools?
 
-Mostly no. If you are using a browser utility — the [Contrast Checker](https://vantra.design/tools/contrast-checker), the type scale generator, the clamp() calculator — Core is not involved at all. Those tools are self-contained and compute everything in the browser.
+Mostly no. If you are using a browser utility like the [Contrast Checker](https://vantra.design/tools/contrast-checker), the type scale generator, or the clamp() calculator, Core is not involved at all. Those tools are self-contained and compute everything in the browser.
 
-If you are using one of the products — the Auto-Fixer, the Maturity Checker — Core is involved under the hood, but you do not interact with it directly. The tool handles the parsing and presents you with findings in plain language.
+If you are using one of the products (the Auto-Fixer, the Maturity Checker), Core is involved under the hood, but you do not interact with it directly. The tool handles the parsing and presents you with findings in plain language.
 
-Core matters directly if you are building something on top of Vantra — writing your own governance rules, extending the graph, or integrating the token schema into your build pipeline. [The "How it works" page](https://vantra.design/how-it-works) on the Vantra site covers that in detail.
+Core matters directly if you are building something on top of Vantra: writing your own governance rules, extending the graph, or integrating the token schema into your build pipeline. [The "How it works" page](https://vantra.design/how-it-works) on the Vantra site covers that in detail.
 
 ---
 
