@@ -103,8 +103,29 @@ function close() {
   openDropdown.value = null
 }
 
+/* ── Mobile menu ── */
+const mobileOpen = ref(false)
+const mobileExpanded = ref<string | null>(null)
+
+function toggleMobile() {
+  mobileOpen.value = !mobileOpen.value
+  if (!mobileOpen.value) mobileExpanded.value = null
+}
+
+function closeMobile() {
+  mobileOpen.value = false
+  mobileExpanded.value = null
+}
+
+function toggleSection(key: string) {
+  mobileExpanded.value = mobileExpanded.value === key ? null : key
+}
+
 const route = useRoute()
-watch(() => route.fullPath, close)
+watch(() => route.fullPath, () => {
+  close()
+  closeMobile()
+})
 </script>
 
 <template>
@@ -122,7 +143,8 @@ watch(() => route.fullPath, close)
         </svg>
       </NuxtLink>
 
-      <nav aria-label="Primary">
+      <!-- Desktop nav -->
+      <nav aria-label="Primary" class="hidden md:block">
         <ul class="flex items-baseline gap-6 sm:gap-10">
           <li
             v-for="item in nav"
@@ -143,6 +165,19 @@ watch(() => route.fullPath, close)
           </li>
         </ul>
       </nav>
+
+      <!-- Mobile hamburger -->
+      <button
+        class="md:hidden flex items-center justify-center w-11 h-11"
+        aria-label="Open menu"
+        @click="toggleMobile"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
     </div>
 
     <!-- Sub-navigation panels -->
@@ -230,6 +265,108 @@ watch(() => route.fullPath, close)
         </div>
       </div>
     </Transition>
+
+    <!-- Mobile fullscreen overlay -->
+    <Transition name="mobile-menu">
+      <div
+        v-if="mobileOpen"
+        class="fixed inset-0 z-50 bg-paper md:hidden"
+      >
+        <div class="gutter flex items-end justify-between py-2 border-b border-rule">
+          <NuxtLink to="/" class="block" aria-label="Vantra — home" @click="closeMobile">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 149.61 39.73" class="h-10" fill="currentColor" aria-hidden="true">
+              <path d="M0,12.65h2.08l9.05,24.99,8.79-24.99h1.97l-9.58,27.08h-2.5L0,12.65Z"/>
+              <path d="M31.44,12.65h2.8l9.73,27.08h-2.12l-2.99-8.29h-12.19l-2.95,8.29h-2.01l9.73-27.08ZM27.27,29.73h10.98l-5.49-15.34-5.49,15.34Z"/>
+              <path d="M48.42,12.65h2.88l15.15,24.16V12.65h2.01v27.08h-2.5l-15.49-24.73v24.73h-2.04V12.65Z"/>
+              <path d="M81.26,14.4h-8.41v-1.74h18.9v1.74h-8.41v25.34h-2.08V14.4Z"/>
+              <path d="M96.12,12.65h7.42c5.26,0,9.2,2.04,9.2,7.27v.15c0,4.51-2.95,6.59-7.01,7.16l8.6,12.5h-2.35l-8.48-12.35h-5.26v12.35h-2.12V12.65ZM103.66,25.68c4.35,0,6.97-1.67,6.97-5.6v-.15c0-4.17-2.76-5.53-6.97-5.53h-5.42v11.29h5.42Z"/>
+              <path d="M127.51,12.65h2.8l9.73,27.08h-2.12l-2.99-8.29h-12.19l-2.95,8.29h-2.01l9.73-27.08ZM123.35,29.73h10.98l-5.49-15.34-5.49,15.34Z"/>
+              <polygon points="149.61 8.05 142.52 15.14 142.04 7.57 134.47 7.1 141.57 0 149.14 .47 149.61 8.05" fill="#021f94"/>
+            </svg>
+          </NuxtLink>
+
+          <button
+            class="flex items-center justify-center w-11 h-11"
+            aria-label="Close menu"
+            @click="closeMobile"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true">
+              <line x1="5" y1="5" x2="19" y2="19" />
+              <line x1="19" y1="5" x2="5" y2="19" />
+            </svg>
+          </button>
+        </div>
+
+        <nav aria-label="Mobile" class="overflow-y-auto" style="height: calc(100vh - 3.5rem)">
+          <ul class="divide-y divide-rule">
+            <li v-for="item in nav" :key="item.to">
+              <!-- Items with children: accordion -->
+              <template v-if="item.children">
+                <button
+                  class="gutter w-full flex items-center justify-between py-5"
+                  :aria-expanded="mobileExpanded === item.to"
+                  @click="toggleSection(item.to)"
+                >
+                  <span class="font-display text-lead">{{ item.label }}</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    class="w-5 h-5 text-ink-muted transition-transform duration-300 ease-editorial"
+                    :class="mobileExpanded === item.to ? 'rotate-180' : ''"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="square"
+                    aria-hidden="true"
+                  >
+                    <polyline points="6,9 12,15 18,9" />
+                  </svg>
+                </button>
+
+                <div v-show="mobileExpanded === item.to" class="gutter pb-6">
+                  <NuxtLink
+                    :to="item.to"
+                    class="caption block mb-4 text-ink hover:text-blue transition-colors duration-300 ease-editorial"
+                    @click="closeMobile"
+                  >
+                    View all
+                  </NuxtLink>
+                  <div
+                    v-for="group in item.children"
+                    :key="group.heading"
+                    class="mb-5 last:mb-0"
+                  >
+                    <p class="caption mb-2">{{ group.heading }}</p>
+                    <ul class="space-y-2">
+                      <li v-for="link in group.links" :key="link.to">
+                        <NuxtLink
+                          :to="link.to"
+                          class="block text-ink-muted hover:text-ink transition-colors duration-300 ease-editorial"
+                          @click="closeMobile"
+                        >
+                          {{ link.label }}
+                        </NuxtLink>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </template>
+
+              <!-- Simple links -->
+              <template v-else>
+                <NuxtLink
+                  :to="item.to"
+                  class="gutter block py-5 font-display text-lead hover:text-blue transition-colors duration-300 ease-editorial"
+                  @click="closeMobile"
+                >
+                  {{ item.label }}
+                </NuxtLink>
+              </template>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </Transition>
   </header>
 </template>
 
@@ -245,5 +382,15 @@ watch(() => route.fullPath, close)
 .nav-dropdown-leave-to {
   opacity: 0;
   transform: translateY(-4px);
+}
+
+.mobile-menu-enter-active,
+.mobile-menu-leave-active {
+  transition: opacity 300ms var(--ease-editorial);
+}
+
+.mobile-menu-enter-from,
+.mobile-menu-leave-to {
+  opacity: 0;
 }
 </style>
